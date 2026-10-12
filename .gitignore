@@ -1,5 +1,8 @@
 # Generated artifacts (regenerable from the datasets on the WSL side)
 outputs/
+gpt6_v3_12_episode_review_pack/
+gpt6_v3_12_episode_review_pack.zip
+gpt6_v3_12_episode_review_pack_shareable.zip
 *.log
 logs/
 
@@ -13,9 +16,14 @@ data/
 *.pth
 
 # Python
+.env
+.env.*
+!.env.example
 __pycache__/
 *.pyc
 .venv/
+.venv-eval/
+.venv-review/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/

@@ -597,8 +597,10 @@ def validate_conversation_artifacts(observation: dict, audit: dict, manifest: di
         raise ValueError("audit artifact has the wrong episode ID")
     for key in ("checked_command_runs", "supported_transitions", "rejected_transitions",
                 "possible_omissions", "semantic_questions", "remaining_uncertainties"):
-        if not isinstance(audit.get(key), list):
-            raise ValueError(f"audit {key} must be a list")
+        accepted = (list, dict) if key == "remaining_uncertainties" else (list,)
+        if not isinstance(audit.get(key), accepted):
+            kinds = "a list or object" if key == "remaining_uncertainties" else "a list"
+            raise ValueError(f"audit {key} must be {kinds}")
 
 
 def validate_gpt(requested: str | None = None) -> list[Path]:
@@ -634,8 +636,11 @@ def freeze_gpt() -> None:
 
 
 def validate_human_review(value: dict, meta: dict, candidate_path: Path) -> None:
-    if value.get("id") != meta["id"] or value.get("episode_outcome") not in {"success", "failure"}:
-        raise ValueError("human review has invalid identity or unresolved outcome")
+    outcome = value.get("episode_outcome")
+    if value.get("id") != meta["id"] or outcome not in {"success", "failure", "unknown"}:
+        raise ValueError("human review has invalid identity or outcome")
+    if outcome == "unknown" and not str(value.get("trajectory_note", "")).strip():
+        raise ValueError("unknown human outcome requires a terminal uncertainty note")
     review_of = value.get("review_of", {})
     if review_of.get("sha256") != sha(candidate_path):
         raise ValueError("human review does not record the frozen GPT candidate hash")

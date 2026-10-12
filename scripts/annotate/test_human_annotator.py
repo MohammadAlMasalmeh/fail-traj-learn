@@ -50,6 +50,20 @@ class HumanAnnotatorTests(unittest.TestCase):
             }))
             self.assertFalse(annotation_complete(episode))
 
+    def test_unknown_outcome_requires_and_accepts_a_terminal_uncertainty_note(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            episode = self.make_episode(Path(tmp), "H001")
+            annotation = {
+                "episode_outcome": "unknown",
+                "segments": [{"start": 0, "end": 2, "text": "object enters occluded area",
+                              "classification": "neutral"}],
+            }
+            (episode / "human_annotation.json").write_text(json.dumps(annotation))
+            self.assertFalse(annotation_complete(episode))
+            annotation["trajectory_note"] = "The recording ends before final support can be seen."
+            (episode / "human_annotation.json").write_text(json.dumps(annotation))
+            self.assertTrue(annotation_complete(episode))
+
     def test_privileged_contacts_are_named_and_ignore_padded_slots(self):
         contact = np.array([[1, 0, 0], [0, 1, 1]])
         grasped = np.array([[0, 0, 0], [0, 1, 1]])

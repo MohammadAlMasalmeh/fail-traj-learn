@@ -80,6 +80,12 @@ class GPT6HumanReviewTests(unittest.TestCase):
                 MODULE.validate_human_review(review, self.meta(), candidate_path)
             review["candidate_review_note"] = "Moved the failure boundary."
             MODULE.validate_human_review(review, self.meta(), candidate_path)
+            review["episode_outcome"] = "unknown"
+            review["trajectory_note"] = "The recording ends before final support is visible."
+            MODULE.validate_human_review(review, self.meta(), candidate_path)
+            review["trajectory_note"] = ""
+            with self.assertRaisesRegex(ValueError, "terminal uncertainty"):
+                MODULE.validate_human_review(review, self.meta(), candidate_path)
 
     def test_conversation_artifacts_require_every_manifest_page(self):
         manifest = {"id": "R001", "pages": ["pages/a.jpg", "pages/b.jpg"]}
@@ -91,6 +97,8 @@ class GPT6HumanReviewTests(unittest.TestCase):
             "checked_command_runs", "supported_transitions", "rejected_transitions",
             "possible_omissions", "semantic_questions", "remaining_uncertainties",
         )}}
+        MODULE.validate_conversation_artifacts(observation, audit, manifest)
+        audit["remaining_uncertainties"] = {"frame_10": "occluded"}
         MODULE.validate_conversation_artifacts(observation, audit, manifest)
         observation["inspected_pages"] = ["pages/a.jpg"]
         with self.assertRaisesRegex(ValueError, "exactly match"):

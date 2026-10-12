@@ -5,6 +5,9 @@ Run from the repository root using the external LeRobot `.venv/bin/python`. See 
 for experiment status. This index lists entry points; imported helpers and benchmark methods remain
 in their existing locations so historical runs and tests stay reproducible.
 
+Current portable annotation commands and retained prompts are documented in
+[the annotation guide](annotate/README.md).
+
 | Task | Entry point | Notes |
 |---|---|---|
 | Audit failure-training data | `analysis/audit_failure_corpus.py` | Read-only corpus checks; only writes the requested report |

@@ -91,10 +91,11 @@ def prepare():
         folder.mkdir()
         with np.load(SOURCE / ep["id"] / "cameras.npz", allow_pickle=False) as arrays:
             for camera in ("agent", "wrist"):
-                if len(arrays[camera]) != ep["n_frames"]:
+                values = arrays[camera]
+                if len(values) != ep["n_frames"]:
                     raise ValueError("Camera frame count differs from metadata")
                 for frame in ep["sampled_frames"]:
-                    Image.fromarray(arrays[camera][frame]).save(
+                    Image.fromarray(values[frame]).save(
                         folder / f"{frame:04d}_{camera}.jpg", quality=90)
         common.write_json(folder / "input.json", ep)
     manifest = dict(

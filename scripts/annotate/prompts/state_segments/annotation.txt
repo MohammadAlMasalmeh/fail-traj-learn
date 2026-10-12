@@ -1,0 +1,290 @@
+# Annotate progress and failure from visible evidence
+
+Identify supported progress and failure intervals relative to the episode's language
+task. Use only the supplied synchronized camera images and ordinary robot telemetry.
+Progress and failure are independent labels and may overlap. The episode may have
+no failure segments. Do not assume either success or failure in advance.
+
+## Establish identity before assigning task progress
+
+Separate the object requested by the task from the object the robot actually touches
+or carries. The instruction describes the goal; it does not identify whatever is
+inside the gripper. Track the manipulated object's appearance and location across
+both cameras. Inspect available views before contact, during transport, and after
+placement for readable packaging, shape, markings, and other distinguishing evidence.
+
+State whether the manipulated object matches the requested object: supported match,
+supported mismatch, or unresolved. Cite source frames and camera views. Quote package
+text only when it is actually legible; never complete blurry text from the task or
+from expectations. Color alone may not distinguish similar packages. Reconcile
+conflicting views rather than naming the object from its first appearance. If the
+requested object cannot be located, that alone does not prove the carried object
+is wrong. A clear identity mismatch can establish a wrong-object action without
+locating the requested object elsewhere.
+
+Do not let uncertainty about identity erase directly visible physical failures.
+When identity remains unresolved, mark affected task-level judgments uncertain
+instead of confidently declaring either a correct-object or wrong-object action.
+
+## Label the task effect and physical behavior separately
+
+**Progress:** Actions that make an observable improvement toward completing the language task, including establishing a useful prerequisite or recovering from a failure. Judge improvement relative to the state before the segment and the requirements of the instructed task. Movement or an attempted action alone is not sufficient.
+
+Examples include:
+- Improving position or alignment for a task-relevant interaction.
+- Establishing or improving useful contact, grasp, or control.
+- Moving an object toward its required location or configuration.
+- Advancing a required state change - for example, opening a drawer, turning a valve, inserting a connector, or cleaning part of a surface.
+- Correcting a problem that prevents completion - for example, freeing a stuck object or adjusting an unusable grasp.
+
+These are illustrative examples, not categories to assign. Explain briefly what changed and how it advances the task in what_happened.
+
+An action can make progress while also causing a failure or side effect; annotate both. An action that makes no observable improvement is not automatically a failure.
+
+Boundary examples:
+- Grasping the wrong object: A successful grasp does not establish progress toward a task requiring a different object.
+- Backing away to realign: Can be progress when the sequence visibly resolves an alignment problem; backing away alone does not establish that.
+
+Judge progress over a meaningful action segment, rather than demanding improvement in every frame. This accommodates regrasping, repositioning, and other useful actions whose intermediate motions temporarily move away from the goal. Still split at independently supported failure boundaries as required below.
+
+**Failure:** an observable unsuccessful attempt, task-inconsistent action, harmful
+side effect, or sustained unproductive behavior. Absence of immediate progress alone
+is not failure. Productive action with a harmful side effect may receive both labels.
+A successful episode may contain failures. A brief pause or recording end alone
+does not establish stalling, task failure, or sudden termination.
+
+For each apparent grasp, loss, or release, check before/after object motion in both
+cameras. A close/open command, finger aperture, or end-effector motion does not prove
+contact, possession, or separation. Occlusion is not evidence that an object was
+dropped. Remaining near the gripper does not by itself prove attachment. Distinguish
+support by a surface from being carried. Report uncertainty where these alternatives
+cannot be resolved; do not invent sticking, damage, or hidden planning faults.
+
+Keep the instructed identity, physical observations, and interval labels consistent
+throughout the answer. Check the later visible evidence against the initial identity
+claim. Also check for missed attempts, wrong-object interactions, release problems,
+and side effects; do not force any of these to exist. Provide concise evidence-based
+conclusions, not a speculative account of internal robot decisions.
+
+## Useful approach, commitment, and failure categories
+
+**Useful approach counts as progress.** Moving into a better position to perform the instructed task can count as progress before a specific object interaction begins. Mere movement toward objects is insufficient; it should visibly improve task-relevant readiness.
+
+**Do not label earlier actions by the eventual outcome.** A later wrong-object grasp does not retroactively make an initially useful approach a failure. Split the segment when the behavior becomes observably directed toward the incorrect object or action. Mark boundary uncertainty when that transition is unclear.
+
+**Separate semantic mistakes from physical execution failures.** Reaching for or successfully grasping the wrong object is a sequencing/semantic failure. Add reaching, grasp, or manipulation only when an independent failure meets that category's definition. Those labels describe failures, not action stages.
+
+## Continue tracking failures throughout the episode
+
+An earlier task-level error does not make later behavior irrelevant. Continue
+checking for every independently supported failure through the final supplied
+frame, even while the task remains unsuccessful or a wrong-object action continues.
+A physical execution failure can occur on the wrong object; identifying it does
+not imply that the object is correct or that the action advances the instructed task.
+
+Evaluate each applicable failure category independently. Include all supported
+categories on the interval where their evidence applies. For example, an unintended
+collision or unsuccessful release can co-occur with a wrong-object action. Conversely,
+a successful grasp or release of the wrong object is not itself a physical failure.
+Do not infer additional failures merely because the overall action is incorrect.
+
+Check for unintended contact and its visible effects on objects or the environment,
+including brief displacement, tipping, lifting, or obstruction. Distinguish intended
+task contact from a collision. Motion alone does not establish the cause: use
+before/after views and flag materially uncertain contact or causal interpretations.
+Do not require damage before considering a supported collision.
+
+When an additional failure starts or ends, split only if the supported failure-category
+set or either progress/failure boolean changes. Assign the full set of currently supported
+failure categories on each resulting interval. End a resolved physical failure
+locally; an unresolved task-level error may continue. Resolving a physical execution
+problem does not by itself correct a wrong-object or other task-level error.
+
+Before returning the answer, review the entire sequence for missed unsuccessful
+attempts, losses of control, release problems, collisions, and other supported side
+effects. Check each reported category against the cited observations and its actual
+interval. Preserve uncertainty and do not invent hidden mechanisms or consequences.
+
+## Full coverage, boundaries, and uncertainty
+
+Cover every source frame exactly once with consecutive half-open intervals
+[start_frame,end_frame), from 0 to n_frames. Assign progress and failure as two
+independent booleans on every interval. All four combinations are valid, including
+both=true and both=false. Both=false is explicitly neither, not unlabeled time.
+When judgments overlap, split at their boundaries and label the overlap true/true.
+No gaps, overlaps, omitted pauses, or empty segment arrays, even on successful episodes.
+
+Use the failure taxonomy below for failure=true segments, including those that also
+make progress. Its definitions and examples are retained from the supplied taxonomy.
+Complete independent progress/failure labeling takes precedence over any implication
+that the two judgments must be exclusive. Keep continuous behavior together and
+split when either judgment changes or the supported failure-category set changes. Do not extend
+a physical failure over an entire wrong-object interval without local evidence.
+
+Start a failure when the erroneous behavior is first supported by observable evidence.
+Do not backdate a wrong-object failure to an ambiguous initial approach solely because
+the later grasp is wrong. Boundaries between samples may be estimated, but describe
+their uncertainty. Cite only supplied source frames and camera views. Commands at
+frame t follow observation t. The exclusive end may equal n_frames; do not cite that
+boundary as an observed image.
+
+When identity or another judgment is unresolved, still provide the best-supported
+boolean pair for coverage, but set review_required=true and explain the uncertainty.
+These are provisional labels, not verified negatives. Do not let uncertainty about
+object identity erase an independently observed physical failure. Be concise and
+explicit about what is visible versus what cannot be determined.
+
+## Failure taxonomy and consequence annotations
+
+Each segment should have the following annotations
+
+1. Segment failure description: a free-form language to specify why the robot failed, consisting of two separate fields:
+   1. What happened during the failure and why the robot failed
+   2. What the robot should do to recover
+2. Failure taxonomy: a categorical label, choose from one or more of the following
+   1. Reaching (pre-contact): The robot did not reach the target object or location, so no contact was made. If a grasp just barely misses the object, count this as grasp instead.
+   2. Grasp (at contact): The target object was not grasped properly. Includes slipping, dropping, or an incorrect grasp.
+   3. Manipulation (post contact): The object was grasped but not manipulated as intended. For example, successfully grasping a door handle but failing to open the door.
+   4. Sequencing or semantic: Error in planning or sequencing of actions. This includes executing a related but wrong action, such as pick-and-place of the wrong object.
+   5. Collision: Collision with an obstacle or the environment. This can co-occur with other categories; please select all that apply.
+   6. Task not attempted: The robot made no discernible attempt at the task, e.g. by stalling
+   7. Sudden episode termination: when the episode terminated suddenly, e.g. due to e-step or a maximum episode length cutoff during rollout
+   8. Visible hardware/mechanical issue: Hardware or mechanical problem with the robot (e.g. when the robot arm suddenly falls down or stops).
+   9. Other: A side-effect or failure mode not covered by the categories above. Please describe it in the free-text field.
+3. Start of segment: earliest moment you think the failure is observable
+4. End of this segment: can be when
+   1. You think the robot is recovering from the failure and starting to do “good” actions
+   2. You think another kind of failure is starting
+   3. The end of the episode
+5. Severity: How serious are the consequences of the failure? Consider actual damage and potential damage.
+   1. Low: No meaningful damage or risk of damage. The failure only prevents the current attempt from succeeding.
+      E.g., robot attempts to grasp an object but misses it; robot grasps an empty cup and it topples over but remains safely on the table.
+   2. Medium: Causes some damage, disruption, or meaningful risk of damage, but the environment remains usable and the task can still be completed.
+      E.g., the robot grasps a paper cup too forcefully, leaving visible crush marks on the cup; robot spills water on the table and cleanup is required.
+   3. Catastrophic: Causes significant damage or creates a level of damage that prevents the task/environment from being safely or practically used without repair or replacement.
+      E.g., spilled water damages a laptop; a robot breaks an object or damages the robot itself.
+6. Resetability: How difficult is it to return the environment to a valid state in which the task can be attempted again?
+   1. Immediately reattempt: No intervention is needed; the task can be attempted again immediately.
+      E.g., the robot misses the object and makes a grasp attempt in empty space.
+   2. Needs some resetting, doable: Minor intervention is needed to restore the environment, but it is quick and straightforward.
+      E.g., the robot knocks a cup over but it remains on the table; a person needs to place the cup upright before retrying.
+   3. Hard reset: Substantial intervention is needed to restore the environment, requiring significant time, effort, or multiple recovery steps.
+      E.g., the robot knocks an object behind a cabinet, requiring a person to move furniture or manually recover the object before retrying.
+   4. Unresettable: The environment cannot be restored to a valid state without repair, replacement, or other intervention beyond a normal reset.
+      E.g., the robot breaks an object that is required for the task.
+
+## State-based segmentation
+
+Define each segment by its state: (progress, failure, set of failure categories).
+Segments are maximal contiguous intervals with the same state. Adjacent segments
+must differ in at least one of these three components. Category order is irrelevant.
+When failure=false, the category set is empty as required by the schema.
+
+Merge consecutive progress-only intervals into one segment even if the robot
+approaches, acquires, transports, positions, places, and releases the object.
+Describe that sequence naturally within the merged interval. Likewise merge
+consecutive failure intervals with the same progress/failure flags and category
+set, even if the robot changes action, starts another attempt, or continues failing.
+Merge consecutive neither intervals and consecutive both intervals by the same rule.
+
+Create a boundary only when progress changes, failure changes, or the supported
+failure-category set changes. For example, progress-only followed by progress
+with collision must remain separate. Two intervals with failure=true are separate
+if their progress flags or failure-category sets differ. Action-stage changes,
+new attempts, changes in wording, severity, or suggested recovery alone do not
+create boundaries. Preserve such meaningful differences in the segment description
+and evidence, using temporal relationships to distinguish successive events.
+Do not smooth away a supported intervening state to join nonadjacent intervals.
+Before returning, check every adjacent pair and merge any identical states.
+Describe all relevant events within the segment; before/after evidence may support
+state transitions. State-based boundaries take precedence over any earlier general
+wording about segment ends or separate attempts in the taxonomy examples.
+
+## Consistent vocabulary for event descriptions
+
+Use the following action terms, or their grammatical forms, in what_happened
+when they accurately describe the observed event:
+- approach: move toward an object or a useful interaction position
+- acquire: attempt to establish possession/control; explicitly distinguish
+  successful acquisition, failed acquisition, and unresolved acquisition
+- transport: carry an object between locations while maintaining control
+- position: align or adjust an object/gripper for the next interaction
+- place: move an object into or onto the intended destination; placing does not
+  by itself establish release, settling, or success
+- release: relinquish control; explicitly distinguish successful release,
+  failed/delayed release, and unresolved separation
+- reposition: change pose or alignment for a new setup or attempt
+- recover: resolve a previously observed problem; an attempted recovery is not
+  automatically a successful recovery
+- idle: remain without a new substantive action; idle is not automatically
+  failure or progress
+
+Use consistent participant, part, and object terminology:
+- robot: the acting system; prefer "the robot" as the subject of actions rather
+  than alternating between robot, arm, manipulator, and gripper as actors
+- robot arm: the arm specifically, when its motion or configuration matters
+- robot gripper: the grasping part specifically; retain this distinction for
+  opening, closing, contact, slipping, sticking, and release
+- object: the manipulated item; use one consistent, evidence-supported name
+  (for example, carton) rather than alternating aliases for the same referent
+- destination: the intended placement location; prefer its observed name when
+  supported (for example, basket), keeping different locations distinct
+
+For example, prefer "The robot transports the carton" to alternating between
+"The arm carries the box" and "The gripper moves the carton" for the same event.
+Use "The robot gripper remains closed" when the part-level state matters.
+Robot and gripper are related referents, not interchangeable physical entities.
+Do not erase part-level distinctions or normalize distinct objects into one.
+
+This is vocabulary guidance, not a fixed script or an exhaustive ontology.
+Do not force an event into an unsuitable term or invent a stage to use a word.
+Use other ordinary action words when needed, and retain meaningful details such
+as slipping, collision, support, sticking, object displacement, and timing.
+Canonical words never override the evidence or the progress/failure definitions.
+Do not replace failed, negated, uncertain, or attempted events with positive ones.
+Preserve actor/object roles, object identity, destinations, outcomes, negation,
+uncertainty, and stated temporal relationships. Do not omit these to make wording
+more uniform. Use consistent names for observed object referents within the
+answer; do not infer identity from the requested task or equate distinct objects.
+Keep natural descriptions of the event and its task effect, rather than outputting
+lists of keywords or boilerplate. Segment according to the state-based guidance above,
+not merely when a preferred word changes. Keep the existing JSON schema unchanged.
+
+## Input and response format
+
+The task, source frame rate and source frame indices follow. Images are chronological
+external/wrist pairs sampled every five source frames plus the final frame, with
+ordinary robot telemetry. Do not use the task or telemetry as identity evidence.
+
+Return only an unfenced JSON object with exactly episode_id, identity_check, segments.
+Use the supplied episode_id, without echoing task metadata or other input fields.
+identity_check has exactly:
+requested_object: the task's requested object
+manipulated_object: concise observed identity/appearance, including distinct objects
+  if needed; do not give a specific product name unless evidence supports it
+match_status: supported_match, supported_mismatch, or unresolved
+ evidence: nonempty array of objects with exactly frame (supplied integer source
+  index), camera (agent or wrist), observation (specific visible evidence)
+uncertainty: material uncertainty about identity, or empty string
+This is a brief evidence-based check, not an inventory of every object in the scene.
+
+segments is a nonempty complete partition of [0,n_frames). Every segment has exactly:
+start_frame: integer inclusive
+end_frame: integer exclusive
+progress: JSON boolean
+failure: JSON boolean
+what_happened: observable behavior and why it is progress, failure, both or neither
+categories: nonempty subset of these identifiers if failure=true, otherwise []:
+  reaching, grasp, manipulation, sequencing_semantic, collision,
+  task_not_attempted, sudden_episode_termination, visible_hardware_issue, other
+recovery: suggested recovery if failure=true, otherwise null
+severity: low, medium, or catastrophic if failure=true, otherwise null
+resetability: immediate, minor_reset, hard_reset, or unresettable if failure=true, otherwise null
+evidence: nonempty array of objects with exactly frame (supplied source index),
+  camera (agent or wrist), observation (specific visible evidence); evidence may
+  include before/after frames needed to establish a transition
+review_required: JSON boolean, true for materially uncertain judgments
+uncertainty: explanation if review_required=true; empty if no material uncertainty
+
+Keep identity conclusions, physical observations and interval judgments consistent.
+First start_frame=0, each start_frame=previous end_frame, final end_frame=n_frames.

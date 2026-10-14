@@ -4,6 +4,7 @@
 
 | Document | Scope |
 |---|---|
+| [Atomic annotation runbook (V8)](annotation_runbook_v8.md) | Frozen binary atomic-action protocol, reproducible runs, combined review, scoring, and human-evaluation priorities |
 | [Failure training](failure_training.md) | Implemented representation learner and manifest contract |
 | [Failure attention design](failure_attention_design.md) | Research plan; separates implemented pretraining from future scoring/control |
 | [Joint failure process model](joint_failure_process_model.md) | Proposed multi-task causal architecture for segment recognition, future failure risk and recovery |

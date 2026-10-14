@@ -13,6 +13,7 @@ The earlier ordinal-advantage methods remain available as baselines.
 
 | Document | Purpose |
 |---|---|
+| [Atomic annotation runbook (V8)](docs/annotation_runbook_v8.md) | Frozen Sol/Astra protocol, annotation and viewer commands, fixed scoring, and next steps |
 | [Training guide](docs/failure_training.md) | Implemented model, annotation manifest, commands, checkpoints |
 | [GPT-6 review guide](REVIEW.md) | Download the review pack and launch the local browser reviewer on Windows, macOS, or Linux |
 | [Data verification](docs/failure_data_verification.md) | Current simulation/oracle inventory, checks and limitations |

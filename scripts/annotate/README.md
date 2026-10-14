@@ -1,106 +1,62 @@
 # Current trajectory annotation tools
 
-The retained workflow uses one shared prompt and identical observable inputs for
-Sol and Astra. Choose atomic actions (the latest development protocol) or maximal
-contiguous progress/failure/category states (the V15 protocol). The two formats
-answer different questions: action boundaries versus task-label transitions.
-Both prompts preserve independent progress and failure labels.
+The working baseline is **V8 atomic actions with failure/non-failure labels**.
+Sol and Astra receive the same frozen prompt, images, timestamps, and ordinary
+telemetry. The latest saved batches cover R001-R012; generated evidence stays
+local under ignored `outputs/` directories.
 
-These entry points prepare evidence directly from recordings. They do not require
-the historical V1–V15 experiment runners. Old frozen runs and research artifacts
-remain local; new runs use new directories and do not rewrite that evidence.
+Start with the [V8 runbook and next steps](../../docs/annotation_runbook_v8.md).
+It contains environment setup, exact prepare/run/review commands, handling failed
+calls, combining batches, fixed scoring, and the R005 review priorities.
 
-## Setup and input
+## Supported entry points
 
-Use Python 3.12 and install `requirements-current-annotation.txt` in a virtual
-environment. Each source episode directory contains `observable.json` with
-`id`, `task`, `n_frames`, `fps`, and per-frame `telemetry`, plus `cameras.npz`
-with synchronized RGB `agent` and `wrist` arrays. Telemetry inputs are limited to
-`eef_xyz_m`, `finger_qpos_m`, and `gripper_command`. Sample every five source
-frames and include the final frame.
+| Tool | Purpose |
+|---|---|
+| `annotate_trajectories.py` | Prepare, verify, execute, and report frozen atomic annotation runs |
+| `prompts/atomic_actions/annotation.txt` | Current shared V8 rules and JSON output contract |
+| `prompts/atomic_actions/comparison.json` | Sol/Astra comparison settings and independence rules |
+| `review_trajectory_annotations.py` | Build a browser review from validated saved outputs and original images |
+| `compare_trajectory_annotations.py` | Compute offline binary/category and temporal agreement |
+| `compare_action_groups.py` | Compare temporally aligned atomic operations and category assignments |
+| `combine_review_batches.py` | Combine complete disjoint same-protocol reviews with per-episode provenance |
+| `score_review_text.py` | Score raw descriptions with the pinned STS baseline and frame-weighted means |
 
-Set `OPENAI_API_KEY` in the environment or a named entry in the ignored `.env`.
-Only OpenAI credentials are needed for these current runners. API transport has
-no automatic retries. Stored pricing is a dated development estimate; check it
-before using the printed reservation for a new paid batch.
+## Protocol
 
-## Prepare and inspect a new run
+- Each segment has an action, physical result, failure boolean, categories,
+  evidence, and uncertainty. Progress and neutral behavior are non-failure.
+- Failure timing follows observable failing behavior rather than causal
+  responsibility or guessed hidden onset.
+- Supported wrong-object engagement can fail semantically before acquisition.
+  Physical success and task correctness are separate judgments.
+- Collision includes supported unwanted contact that disturbs a destination.
+  Direct visibility of the exact contacting part is not always required.
+- Use canonical action verbs, stable instruction-aligned names for supported
+  matches, and concise operation/result/failure descriptions. Preserve genuine
+  identity differences, negation, and uncertainty.
+- Separation or destination entry does not establish final support or settling.
+  Stop claims at the last supported observation and flag unverified outcomes.
 
-```powershell
-python scripts/annotate/annotate_trajectories.py prepare --scheme atomic --source gpt6_v3_12_episode_review_pack/episodes --episodes R001 R002 R003 R004 --out outputs/my_atomic_run
-python scripts/annotate/annotate_trajectories.py verify --out outputs/my_atomic_run
-```
+The prompt contains general rules rather than episode-specific required labels.
+Disagreement diagnoses uncertain evidence, model mistakes, or protocol gaps; it
+is not an objective to optimize to 100% agreement. Schema validation alone does
+not establish visual accuracy.
 
-Preparation is offline and prints the episode matrix, call count, manifest hash,
-and maximum reservation. Use `--scheme states` and a different output directory
-for state-based segmentation. Models receive the same images, telemetry, prompt,
-and request settings. Scheme, code, prompt, image bytes, and settings are frozen.
+## Scoring and artifacts
 
-When ready to spend API credits, run the prepared batch:
+The current text scorer uses raw bidirectional STS predictions, without an
+identical-text override or calibration. It compares only `what_happened`; the
+scores are similarity indices rather than percentages of semantic agreement.
+Model weights and the tested dependency stack are pinned. Separate binary,
+category, and action metrics retain differences that text similarity can miss.
 
-```powershell
-python scripts/annotate/annotate_trajectories.py run --out outputs/my_atomic_run
-python scripts/annotate/annotate_trajectories.py report --out outputs/my_atomic_run
-```
+Every paid run keeps its original manifest, prompt, input bytes, request attempts,
+raw answers, annotations, and cost estimates. Existing reservations are never
+resent automatically. Same-protocol supplements can fill missing outputs, but
+cannot replace validated ones. Combined viewers are derived review artifacts,
+not additional paid runs. Keep original source directories when sharing a viewer.
 
-Existing attempt reservations are never resent. Interrupted, invalid, or incomplete
-responses remain visible in the ledger. A changed experiment requires a new run;
-do not remove attempt files to retry uncertain billed calls.
-
-## Review and compare saved outputs
-
-```powershell
-python scripts/annotate/review_trajectory_annotations.py --run outputs/my_atomic_run --source gpt6_v3_12_episode_review_pack/episodes
-python scripts/annotate/compare_trajectory_annotations.py --run outputs/my_atomic_run --out outputs/my_atomic_run/agreement.json
-```
-
-The viewer checks source and frozen input hashes, displays exact sampled evidence
-and full-frame playback, and shows annotations and missing/invalid outputs. Review
-notes stay in browser storage until downloaded. It makes no API calls. Existing
-`outputs/atomic_actions` can also be reviewed and compared with these commands.
-
-The offline report separates progress/failure agreement, failure categories,
-phase boundaries, binary-state boundaries, segment overlap, and review flags.
-Unavailable outputs remain explicit. Undefined failure F1 is null when neither
-side labels failures. Agreement is not annotation accuracy.
-
-For the optional paid description judge on a new atomic-action run:
-
-```powershell
-python scripts/annotate/compare_annotation_descriptions.py prepare --annotations outputs/my_atomic_run --out outputs/my_description_comparison
-python scripts/annotate/compare_annotation_descriptions.py run --annotations outputs/my_atomic_run --out outputs/my_description_comparison
-```
-
-It compares temporally intersecting descriptions in both input orders with frozen
-paraphrase, negation, identity, attempt/result, and task-progress controls. Scores
-measure textual agreement, not video correctness. Astra is also an annotator, so
-order balancing does not eliminate judge bias. The comparison supports atomic
-annotations; it is not a reference-based quality evaluator.
-
-## Verification
-
-```powershell
-python -m unittest discover -s scripts/annotate -p test_annotate_trajectories.py
-python -m unittest discover -s scripts/annotate -p test_annotation_workflow.py
-python -m unittest discover -s scripts/annotate -p test_compare_annotation_descriptions.py
-python -m unittest discover -s scripts/annotate -p test_trajectory_metrics.py
-```
-
-## Next experiment
-
-Use atomic actions as the working candidate, retain states as a comparator, and
-freeze the prompt before adding new evaluation episodes. The current four R
-episodes have already been inspected repeatedly and are development data.
-
-1. Independently annotate a small new evaluation set using the chosen format.
-   Resolve object identity, brief failures, boundaries, and uncertain coverage.
-2. Run the frozen annotation protocol on that set and evaluate against adjudicated
-   human references. Implement the reference adapter for this exact schema first;
-   older exclusive-label H references do not validate four-state labels.
-3. Decide whether the protocol has enough usable positive and reviewed negative
-   coverage to expand annotation. Compare reliability and cost alongside quality.
-4. Export a reviewed, episode-disjoint training manifest with unknown masks, then
-   compare the causal temporal learner with a chunk MLP on the same split.
-
-High inter-model agreement and passing description controls alone do not justify
-bulk annotation or a claim that the resulting supervision is correct.
+Older state-based and description-judge workflows remain historical comparators.
+They are not the current human-label schema or independent evaluation protocol.
+See the runbook before collecting human labels or exporting training supervision.

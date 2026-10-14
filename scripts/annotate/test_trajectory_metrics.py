@@ -8,6 +8,24 @@ def seg(a,b,p=False,f=False,**kw):
     return dict(start=a,end=b,progress=p,failure=f,description='Robot moves the object.',failure_types='wrong_action' if f else 'none',**kw)
 
 class MetricsTests(unittest.TestCase):
+    def test_binary_mode_groups_progress_and_neutral_without_mutating_saved_labels(self):
+        left=[seg(0,10,p=True),seg(10,20,f=True,p=True)]
+        right=[seg(0,10),seg(10,20,f=True)]
+        m=evaluate(left,right,20,20,label_mode='failure_binary')
+        self.assertEqual(m['joint_accuracy'],1)
+        self.assertEqual(m['state_order'],['non_failure','failure','missing_prediction'])
+        self.assertEqual(set(m['axes']),{'failure'})
+        self.assertEqual(m['axes']['failure']['tp'],10)
+        self.assertTrue(left[0]['progress'])
+
+    def test_binary_annotations_need_no_progress_field_and_keep_missing_predictions(self):
+        left=[dict(start=0,end=10,failure=False,categories=[])]
+        right=[dict(start=0,end=20,failure=True,categories=['collision'])]
+        m=evaluate(left,right,20,20,label_mode='failure_binary')
+        self.assertEqual(m['prediction_coverage'],.5)
+        self.assertEqual(m['axes']['failure']['fn'],20)
+        self.assertEqual(m['joint_accuracy'],0)
+
     def test_perfect_labels(self):
         rows=[seg(0,10,p=True),seg(10,20,f=True)]
         m=evaluate(rows,rows,20,20)

@@ -16,7 +16,7 @@ def segment(start, end, action_id, action, failure=False):
         start_frame=start, end_frame=end, action_id=action_id, action=action,
         object_id="object_1", destination_id="basket_1", observed_result="Observed relocation.",
         boundary_reason="episode_start" if start == 0 else "Supported operation or failure transition.",
-        progress=True, failure=failure, what_happened="The robot transports object_1.",
+        failure=failure, what_happened="The robot transports object_1.",
         categories=["collision"] if failure else [],
         recovery="Clear the obstacle." if failure else None,
         severity="low" if failure else None, resetability="immediate" if failure else None,
@@ -34,6 +34,28 @@ def annotation(segments):
 
 
 class AtomicActionsTests(unittest.TestCase):
+    def test_binary_schema_rejects_progress_and_non_boolean_failure(self):
+        value = annotation([segment(0, 20, 'a1', 'transport')])
+        run.validate(value, EP)
+        extra = deepcopy(value)
+        extra['segments'][0]['progress'] = True
+        with self.assertRaisesRegex(ValueError, 'fields'):
+            run.validate(extra, EP)
+        invalid = deepcopy(value)
+        invalid['segments'][0]['failure'] = 0
+        with self.assertRaisesRegex(ValueError, 'boolean failure'):
+            run.validate(invalid, EP)
+
+    def test_legacy_progress_annotations_remain_reviewable(self):
+        value = annotation([segment(0, 10, 'a1', 'transport'),
+                            segment(10, 20, 'a1', 'transport')])
+        value['segments'][0]['progress'] = True
+        value['segments'][1]['progress'] = False
+        run.validate_atomic(value, EP, label_mode='progress_failure')
+        del value['segments'][1]['progress']
+        with self.assertRaisesRegex(ValueError, 'fields'):
+            run.validate_atomic(value, EP, label_mode='progress_failure')
+
     def test_different_actions_with_identical_task_labels_are_valid(self):
         run.validate(annotation([segment(0, 10, "a1", "grasp"),
                                  segment(10, 20, "a2", "transport")]), EP)

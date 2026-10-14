@@ -15,10 +15,13 @@ import annotation_runtime as transport
 ROOT = common.ROOT
 OUT = ROOT / "outputs/trajectory_annotations_atomic"
 SCHEME = "atomic"
+LABEL_MODE = "failure_binary"
 SOURCE = common.SOURCE
 PROMPT_DIR = ROOT / "scripts/annotate/prompts/atomic_actions"
 IDS = ("R001", "R002", "R003", "R004")
-MODELS = {"sol": "gpt-6.1-sol", "astra": "gpt-6-astra"}
+AVAILABLE_MODELS = {"sol": "gpt-6.1-sol", "astra": "gpt-6-astra"}
+MODELS = dict(AVAILABLE_MODELS)
+REASONING = "low"
 MAX_INPUT, MAX_OUTPUT = 80000, 12288
 RESERVES = {"sol": .50, "astra": 2.50}
 RATES = {
@@ -31,7 +34,7 @@ CATEGORIES = {
 }
 FIELDS = {
     "start_frame", "end_frame", "action_id", "action", "object_id", "destination_id",
-    "observed_result", "boundary_reason", "progress", "failure", "what_happened",
+    "observed_result", "boundary_reason", "failure", "what_happened",
     "categories", "recovery", "severity", "resetability", "evidence",
     "review_required", "uncertainty",
 }
@@ -39,10 +42,11 @@ FIELDS = {
 
 def settings():
     return dict(
-        scheme=SCHEME, models=MODELS, reasoning="low", image_detail="high", sample_stride=5,
+        scheme=SCHEME, label_mode=LABEL_MODE, models=MODELS, reasoning=REASONING, image_detail="high", sample_stride=5,
         max_input_tokens=MAX_INPUT, max_output_tokens=MAX_OUTPUT, workers=2,
-        retries=0, reservations=RESERVES, maximum_reserved_usd=len(IDS) * sum(RESERVES.values()),
-        rates_per_million=RATES, price_checked="2026-10-10",
+        retries=0, reservations={k: RESERVES[k] for k in MODELS},
+        maximum_reserved_usd=len(IDS) * sum(RESERVES[k] for k in MODELS),
+        rates_per_million={k: RATES[k] for k in MODELS}, price_checked="2026-10-10",
         pricing_sources=[
             "https://developers.openai.com/api/docs/models/gpt-6-astra",
             "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
@@ -110,7 +114,7 @@ def prepare():
     report()
     print(json.dumps(dict(
         episodes=[dict(id=e["id"], camera_pairs=len(e["sampled_frames"])) for e in records],
-        models=MODELS, calls=len(IDS)*len(MODELS), maximum_reserved_usd=len(IDS) * sum(RESERVES.values()),
+        models=MODELS, calls=len(IDS)*len(MODELS), maximum_reserved_usd=settings()["maximum_reserved_usd"],
         manifest_sha256=common.digest(OUT / "manifest.json"),
     )), flush=True)
 
@@ -145,13 +149,13 @@ def payload(model_key, ep):
                               image_url="data:image/jpeg;base64," + data))
     return dict(
         model=MODELS[model_key], input=[dict(role="user", content=parts)],
-        reasoning=dict(effort="low"), max_output_tokens=MAX_OUTPUT,
+        reasoning=dict(effort=REASONING), max_output_tokens=MAX_OUTPUT,
         text=dict(format=dict(type="json_object")), store=False,
         service_tier="default", truncation="disabled",
     )
 
 
-def validate_atomic(value, ep):
+def validate_atomic(value, ep, label_mode=None):
     def require(condition, message):
         if not condition:
             raise ValueError(message)
@@ -180,9 +184,16 @@ def validate_atomic(value, ep):
     evidence(identity["evidence"])
     segments = value["segments"]
     require(isinstance(segments, list) and bool(segments), "Complete nonempty partition required")
+    if label_mode is None:
+        label_mode = "progress_failure" if "progress" in segments[0] else "failure_binary"
+    require(label_mode in ("failure_binary", "progress_failure"), "Unknown label mode")
+    fields = FIELDS | ({"progress"} if label_mode == "progress_failure" else set())
+    def task_state(segment):
+        return ((segment["progress"],) if label_mode == "progress_failure" else ()) + (
+            segment["failure"], frozenset(segment["categories"]))
     cursor, action_count, previous, known_referents = 0, 0, None, {}
     for segment in segments:
-        require(isinstance(segment, dict) and set(segment) == FIELDS, "Atomic segment fields")
+        require(isinstance(segment, dict) and set(segment) == fields, "Atomic segment fields")
         a, b = segment["start_frame"], segment["end_frame"]
         require(type(a) is int and type(b) is int and a == cursor and a < b <= ep["n_frames"],
                 "Gap, overlap, or invalid boundary")
@@ -194,8 +205,9 @@ def validate_atomic(value, ep):
                 "Action must be a lower-case operation identifier")
         for k in ("object_id", "destination_id"):
             require(segment[k] is None or nonempty(segment[k]), "Stable referent identifiers")
-        require(type(segment["progress"]) is bool and type(segment["failure"]) is bool,
-                "Independent boolean task labels required")
+        require(type(segment["failure"]) is bool, "Explicit boolean failure label required")
+        if label_mode == "progress_failure":
+            require(type(segment["progress"]) is bool, "Legacy progress label must be boolean")
         cats = segment["categories"]
         require(isinstance(cats, list) and all(isinstance(c, str) for c in cats)
                 and set(cats) <= CATEGORIES and len(cats) == len(set(cats)), "Failure categories")
@@ -225,8 +237,7 @@ def validate_atomic(value, ep):
                     require(known_referents.get(k) in (None, segment[k]),
                             "Linked action pieces must retain known referents")
                     known_referents[k] = segment[k]
-            require((previous["progress"], previous["failure"], set(previous["categories"])) !=
-                    (segment["progress"], segment["failure"], set(cats)),
+            require(task_state(previous) != task_state(segment),
                     "Adjacent identical pieces of the same action must be merged")
         else:
             action_count += 1
@@ -300,6 +311,8 @@ def execute(model_key, ep, keys):
         record["status"] = "validated"
     except Exception as exc:
         record.update(status="stopped", error=transport.redact(str(exc), keys)[:800])
+        if isinstance(exc, transport.APIHTTPError):
+            record["error_details"] = exc.details
     finally:
         record["elapsed_seconds"] = round(time.time() - record["started"], 2)
         transport.atomic_json(slot, record)
@@ -324,19 +337,32 @@ def run():
 
 def validate(value, ep):
     if SCHEME == "atomic":
-        return validate_atomic(value, ep)
+        return validate_atomic(value, ep, label_mode=LABEL_MODE)
     from annotation_states import validate
     return validate(value, ep)
 
 
-def configure(out, source=None, episodes=None, scheme=None):
-    global OUT, SOURCE, IDS, SCHEME, PROMPT_DIR
+def configure(out, source=None, episodes=None, scheme=None, models=None, reasoning=None):
+    global OUT, SOURCE, IDS, SCHEME, LABEL_MODE, PROMPT_DIR, MODELS, REASONING
     OUT = Path(out).resolve()
+    saved = common.load(OUT / "manifest.json") if (OUT / "manifest.json").exists() else None
+    selected = dict(saved["settings"]["models"]) if saved else {
+        k: AVAILABLE_MODELS[k] for k in (models or AVAILABLE_MODELS)}
+    if models is not None and (len(set(models)) != len(models) or set(models) != set(selected)):
+        raise ValueError("Model selection differs from the frozen run or contains duplicates")
+    selected_reasoning = saved["settings"].get("reasoning", "low") if saved else (reasoning or "low")
+    if reasoning is not None and reasoning != selected_reasoning:
+        raise ValueError("Reasoning differs from the frozen run")
+    MODELS, REASONING = selected, selected_reasoning
     if source is not None:
         SOURCE = Path(source).resolve()
     if scheme is None and (OUT / "manifest.json").exists():
         scheme = common.load(OUT / "manifest.json")["settings"]["scheme"]
     SCHEME = scheme or "atomic"
+    if (OUT / "manifest.json").exists():
+        LABEL_MODE = common.load(OUT / "manifest.json")["settings"].get("label_mode", "progress_failure")
+    else:
+        LABEL_MODE = "failure_binary" if SCHEME == "atomic" else "progress_failure"
     PROMPT_DIR = ROOT / "scripts/annotate/prompts" / ("atomic_actions" if SCHEME == "atomic" else "state_segments")
     if episodes is None and (OUT / "manifest.json").exists():
         episodes = [e["id"] for e in common.load(OUT / "manifest.json")["episodes"]]
@@ -352,8 +378,10 @@ if __name__ == "__main__":
     p.add_argument("--source", type=Path)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--episodes", nargs="+")
+    p.add_argument("--models", nargs="+", choices=tuple(AVAILABLE_MODELS))
+    p.add_argument("--reasoning", choices=("low", "medium", "high", "xhigh", "max"))
     args = p.parse_args()
-    configure(args.out, args.source, args.episodes, args.scheme)
+    configure(args.out, args.source, args.episodes, args.scheme, args.models, args.reasoning)
     result = globals()[args.command]()
     if args.command == "run" and not result:
         raise SystemExit(1)

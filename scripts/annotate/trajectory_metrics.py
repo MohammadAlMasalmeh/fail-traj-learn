@@ -16,7 +16,7 @@ def prf(tp,fp,fn):
 
 
 def state(s):
-    return int(s['progress'])*2+int(s['failure'])
+    return int(s['progress'])*2+int(s['failure']) if 'progress' in s else int(s['failure'])
 
 
 def failure_types(s):
@@ -109,16 +109,24 @@ def semantic_overlap(pred,ref,n,vectors):
             'same_state_text_coverage_fraction':matching_frames/n,'pairs':pairs}
 
 
-def evaluate(pred,ref,n,fps,vectors=None, require_verified=True):
+def evaluate(pred,ref,n,fps,vectors=None, require_verified=True, label_mode='progress_failure'):
+    if label_mode not in ('progress_failure', 'failure_binary'):
+        raise ValueError('Unknown label mode')
+    binary = label_mode == 'failure_binary'
+    if binary:
+        pred=[{k:v for k,v in s.items() if k!='progress'} for s in pred]
+        ref=[{k:v for k,v in s.items() if k!='progress'} for s in ref]
     p,r=timeline(pred,n),timeline(ref,n)
     if any(s is None for s in r):raise ValueError('Reference is not complete')
     for s in ref:
-        if require_verified and (s.get('review_required') or 'low' in (s.get('progress_confidence'),s.get('failure_confidence'))):
+        confidences=(s.get('failure_confidence'),) if binary else (s.get('progress_confidence'),s.get('failure_confidence'))
+        if require_verified and (s.get('review_required') or 'low' in confidences):
             raise ValueError('Reference still has unresolved/provisional labels')
-    confusion=[[0]*5 for _ in range(4)] # rows reference; columns prediction, fifth=missing
-    for a,b in zip(p,r):confusion[state(b)][state(a) if a is not None else 4]+=1
+    count=2 if binary else 4
+    confusion=[[0]*(count+1) for _ in range(count)] # final prediction column = missing
+    for a,b in zip(p,r):confusion[state(b)][state(a) if a is not None else count]+=1
     axes={}
-    for axis in ('progress','failure'):
+    for axis in (('failure',) if binary else ('progress','failure')):
         tp=fp=fn=tn=0
         for a,b in zip(p,r):
             truth=b[axis];guess=a[axis] if a else None
@@ -136,9 +144,10 @@ def evaluate(pred,ref,n,fps,vectors=None, require_verified=True):
     ps,rs=collapse(pred),collapse(ref)
     rawp=[s['start'] for s in pred if 0<s['start']<n];rawr=[s['start'] for s in ref if 0<s['start']<n]
     statep=[s['start'] for s in ps if 0<s['start']<n];stater=[s['start'] for s in rs if 0<s['start']<n]
-    result={'joint_accuracy':sum(confusion[i][i] for i in range(4))/n,
+    result={'label_mode':label_mode, 'joint_accuracy':sum(confusion[i][i] for i in range(count))/n,
             'joint_confusion_reference_rows_prediction_columns':confusion,
-            'state_order':['neither','failure_only','progress_only','both','missing_prediction'],
+            'state_order':['non_failure','failure','missing_prediction'] if binary else ['neither','failure_only','progress_only','both','missing_prediction'],
+            'failure_category_accuracy':sum(a is not None and a['failure']==b['failure'] and failure_types(a)==failure_types(b) for a,b in zip(p,r))/n,
             'prediction_coverage':sum(s is not None for s in p)/n,'axes':axes,'failure_types':labels,
             'phase_boundaries':[boundaries(rawp,rawr,fps,t) for t in (.10,.25,.50)],
             'binary_state_boundaries':[boundaries(statep,stater,fps,t) for t in (.10,.25,.50)],

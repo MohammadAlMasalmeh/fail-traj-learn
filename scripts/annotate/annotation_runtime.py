@@ -20,10 +20,39 @@ def write_json(path, value):
 def load(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
+
+def comparison_sources(run_dir, left, right, right_run=None):
+    """Verify frozen evidence and retain provenance when reusing a saved baseline."""
+    folders = (Path(run_dir).resolve(), Path(right_run or run_dir).resolve())
+    manifests = tuple(load(folder / 'manifest.json') for folder in folders)
+    for folder, manifest, key in zip(folders, manifests, (left, right)):
+        if key not in manifest['settings']['models']:
+            raise ValueError('Model key is unavailable in its source run')
+        for name, expected in manifest['files'].items():
+            path = (folder / name).resolve()
+            if not path.is_relative_to(folder) or digest(path) != expected:
+                raise ValueError('Frozen evidence changed')
+    if manifests[0]['episodes'] != manifests[1]['episodes']:
+        raise ValueError('Comparison runs must have identical episode evidence')
+    inputs = [{k: v for k, v in m['files'].items() if k != 'prompt.txt'} for m in manifests]
+    if inputs[0] != inputs[1]:
+        raise ValueError('Comparison runs must have identical frozen image/input bytes')
+    return folders, manifests
+
 def redact(text, keys):
     for key in keys.values():
         text = text.replace(key, '[REDACTED]')
     return re.sub(r'(?<![A-Za-z0-9])(?:sk-[A-Za-z0-9_-]{24,}|AIza[A-Za-z0-9_-]{24,})', '[REDACTED]', text)
+
+
+class APIHTTPError(RuntimeError):
+    """Preserve sanitized API error diagnostics without retrying the request."""
+
+    def __init__(self, details):
+        self.details = details
+        classification = details.get('code') or details.get('type')
+        suffix = f' [{classification}]' if classification else ''
+        super().__init__(f"{details['provider']} HTTP {details['status']}{suffix}: {details['message']}"[:800])
 
 def post(url, provider, payload, keys):
     auth = {'Authorization': 'Bearer ' + keys[provider]} if provider == 'openai' else {'x-goog-api-key': keys[provider]}
@@ -35,10 +64,20 @@ def post(url, provider, payload, keys):
     except urllib.error.HTTPError as e:
         try:
             error = json.loads(e.read()).get('error', {})
+            if not isinstance(error, dict):
+                error = {}
             message = str(error.get('message', ''))
         except Exception:
+            error = {}
             message = 'Unparseable error body'
-        raise RuntimeError(redact(f'{provider} HTTP {e.code}: {message}', keys)[:800]) from None
+        details = dict(provider=provider, status=e.code, message=message[:1600],
+                       code=error.get('code'), type=error.get('type'), param=error.get('param'),
+                       request_id=e.headers.get('x-request-id') if e.headers else None,
+                       retry_after=e.headers.get('retry-after') if e.headers else None,
+                       organization=e.headers.get('openai-organization') if e.headers else None,
+                       project=e.headers.get('openai-project') if e.headers else None)
+        details = json.loads(redact(json.dumps(details), keys))
+        raise APIHTTPError(details) from None
     except Exception as e:
         raise RuntimeError(f'{provider} {type(e).__name__}; no retry') from None
 

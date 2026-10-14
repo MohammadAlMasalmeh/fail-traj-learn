@@ -1,4 +1,4 @@
-# Annotate atomic actions, physical results, progress, and failure
+# Annotate atomic actions, physical results, and failure/non-failure
 
 Label the entire episode relative to its language task. Use only the supplied
 synchronized camera images and ordinary robot telemetry. Judge this episode from
@@ -7,11 +7,119 @@ its own evidence. Do not assume either success or failure in advance.
 Separate three judgments:
 - Action: what operation the robot performs or attempts.
 - Observed result: what physically changes, remains unchanged, or is unresolved.
-- Task effect: whether the behavior makes progress and whether it is a failure.
+- Failure: whether an independently supported failure occurs during the behavior.
 
-A successful physical operation can be a task error. For example, establishing
-control of the wrong object is a successful grasp but a semantic failure. This
-example is hypothetical; do not assume it occurs in the supplied episode.
+## Physical outcome for every action
+
+For every action, explicitly judge the concrete physical result separately from
+task correctness and uncertainty. Use an affirmative or negative statement about
+the result relevant to that operation, rather than leaving the description at
+"attempts", "appears", or generic "success/failure". Evaluate the result by operation:
+- reach/approach: the gripper reaches the interaction position, or has not reached it.
+- grasp: the robot establishes control of the object, or does not acquire it.
+- lifting motion: the object rises under robot control, or the tool rises without it.
+- transport: the object relocates under robot control, or that relocation does not occur.
+- release: the object separates from the gripper, or remains retained.
+- withdraw: the gripper moves away from the interaction, or remains there.
+Preserve the canonical action vocabulary; lifting motion is a physical result,
+not an additional required action category. For idle, state the observed
+absence of substantive motion/interaction rather than inventing a completion goal.
+
+Judge the physical result supported by the segment's evidence, including its
+supported outcome by the end. Initial uncertainty must not replace an outcome
+that becomes established within the segment. Uncertainty about the exact onset
+does not make an established outcome unresolved. Conversely, an outcome supported
+only after the segment does not establish that it occurred within this interval.
+An ongoing action can have a result not yet achieved; that alone is not failure.
+State material transitions or later loss of a result rather than implying the
+outcome held throughout every frame.
+
+Treat each physical transition and resulting state as a separate evidence claim.
+An observed transition does not establish its expected downstream state. Distinguish
+separation, entry into a destination, contact with a surface, and stable support
+or settling. Visible location inside a destination does not by itself establish
+support, and downward movement does not establish that settling has finished.
+Claim stable or retained support only when the supplied observations establish
+support and persistence of that state, rather than continued transit or falling.
+Do not infer an unobserved end state from the intended action, typical physics,
+successful separation, or the recording endpoint.
+
+When the recording ends before a resulting state can be verified, describe only
+the last supported transition/state and explicitly identify the unobserved result
+as not shown or not verified. Keep established results affirmative; uncertainty
+about a downstream state must not erase an independently established transition.
+Set review_required=true and explain which result lacks confirming evidence.
+Missing confirmation of a later state alone does not establish failure.
+
+When evidence cannot verify the physical outcome, state the best-supported
+physical judgment as provisional, set review_required=true, and explain the
+missing/conflicting evidence in uncertainty. Absence of evidence is not a verified
+negative. Do not turn this reporting requirement into an unsupported claim of
+certainty. Keep what_happened and observed_result consistent about the same result.
+Task mismatch does not erase an achieved physical result: acquiring, lifting, or
+relocating the wrong object can physically succeed while being semantic failure.
+
+For task mismatch, distinguish target evidence from physical-result evidence.
+An object-directed grasp attempt can be visibly incorrect before successful
+control is established. Occluded finger/contact surfaces do not by themselves
+make the target unknown: reconcile object location, finger alignment, closure,
+and continuous tracking across both views. Use the target supported by that
+combined evidence, rather than requiring visible contact surfaces or lifting.
+
+Localize semantic failure to the first supported interaction with an incorrect
+referent, independently of whether physical acquisition succeeds. If target
+engagement remains ambiguous across the combined views, keep the target judgment
+provisional until distinguishing evidence is available. Later acquisition alone
+does not establish an earlier interaction that was not visible.
+
+Before marking a named wrong-object grasp attempt non-failure, check whether the
+uncertainty is about the TARGET or only the RESULT. Uncertain acquisition alone
+does not cancel a supported task mismatch. If target engagement is genuinely
+unresolved, explain the competing referents and the missing distinguishing cue.
+
+## Temporal target: observable failure, not causal responsibility
+
+Localize the interval where a failure is observable in the supplied evidence.
+We are NOT assigning causal responsibility, finding the earlier action/frame that
+caused a later failure, or estimating the hidden physical onset of an event.
+start_frame for a failure segment means the first supplied observation that
+supports the observable failing behavior/state. It does not mean when the robot
+made the responsible decision or when the failed attempt began.
+
+Keep action timing separate from failure timing. Reaching, closure, opening, or
+another operation may begin before any failure is observable. A later failure
+does not make the entire attempt a failure. Split a continuing action when failure
+first becomes observably supported; retain its action_id across that label change.
+Do not backdate failure to an action start, command, possible initiating contact,
+or guessed responsible frame merely because the subsequent outcome is bad.
+
+Disengagement initiation does not establish release failure. Label delayed
+release only once the images/relative motion support
+abnormal continued retention or another observable failure to disengage. Initial
+opening with unresolved separation must not be labeled failure solely because
+delayed separation becomes visible later. This rule applies to every task and
+episode; do not impose a fixed number of frames of acceptable opening latency.
+
+Later observations may clarify object identities or confirm interpretation, but
+each localized positive failure needs evidence of failing behavior/state at that
+time. A later bad outcome alone is insufficient. Cite the supplied frame(s) and
+views that support the observable failure and explain the relevant change.
+
+With sparse images, use the first failure-supporting supplied observation as the
+positive onset; report the interval since the preceding sample in uncertainty.
+Do not move the positive onset earlier within that bracket to guess when the
+hidden event actually began. Earlier unresolved intervals remain provisional;
+lack of observable failure is not proof of a verified negative.
+
+End a failure label when its failing behavior/state observably ceases, or when
+the failing operation ends and no continuing failure is independently supported.
+An action change alone does not prove a failure began or ended. Do not assign
+later segments failure merely because the episode failed or an earlier failure's
+consequences remain. Flag uncertain cessation instead of claiming an exact hidden
+contact/disengagement time.
+
+A physically successful operation can be task-inconsistent. Assess physical
+outcome and semantic correctness independently from their supporting evidence.
 
 ## Object identity and evidence
 
@@ -27,11 +135,31 @@ camera views. Failure to locate the requested object alone does not prove mismat
 A clearly identified wrong object can establish mismatch without locating the
 requested object elsewhere. Do not invent hidden perception or planning causes.
 
-Give each tracked object a stable identifier, such as carton_1 or object_1, and
-each relevant destination a stable identifier, such as basket_1. Reuse identifiers
-throughout the episode; never merge distinct objects because they look similar.
-An identifier tracks a physical referent, not a product identity. When identity
-becomes clearer, retain the identifier and explain the evidence-supported name.
+Use the instruction's object/destination terms as the canonical names whenever
+the observed referents are supported as matching them. Do not substitute a
+packaging or physical-form name for a supported matching instruction term.
+Describe packaging shape/material as additional properties when relevant,
+without replacing the canonical referent name. Apply this rule to destinations
+and fixtures as well as interaction objects.
+
+Create stable identifiers from these canonical names, using lowercase words
+joined by underscores and a numerical suffix.
+Different physical instances receive different suffixes. When a manipulated
+object does not match the instruction, use its independently supported actual
+name and explicitly describe the mismatch. Never assign the requested name to an
+incorrect or unresolved referent solely because it appears in the instruction.
+For unresolved identities, use the generic prefix object or destination with a
+numerical suffix and explain the uncertainty; do not invent a product name.
+
+Determine each referent's canonical name from the available identity evidence
+for the episode and assign its identifier consistently across all segments.
+Later identity confirmation may name an already continuously tracked referent;
+it does not establish earlier target engagement, possession, or failure timing.
+If identity remains conflicting, retain a generic identifier and flag review.
+Reuse an existing identifier if a destination is also interacted with as an
+object. Never merge distinct objects because they look similar. Identifiers are
+local to the episode and do not prove correspondence across model annotations.
+Record appearance, packaging, product identity, and source evidence in identity_check.
 Use null when no specific referent can be supported; explain material uncertainty.
 
 For apparent grasp, loss, or release, compare before/after relative motion in both
@@ -39,32 +167,40 @@ cameras. Commands, finger aperture, proximity, or tool movement alone do not pro
 contact, possession, or separation. Occlusion does not prove dropping. Remaining
 near the tool does not prove attachment. Distinguish carriage from surface support.
 
-## Progress and failure
+## Failure and non-failure
 
-Progress means an observable improvement toward completing the instructed task,
-including a useful prerequisite or recovery. Compare with the state before the
-action: improved task-relevant position/alignment, useful contact or control,
-movement toward the required location/configuration, a required state change, or
-resolution of a problem preventing completion. Movement or an attempt alone is
-insufficient. Judge over a meaningful action interval, not tiny framewise motions.
-
-A useful initial reach can count as progress before a particular interaction.
-It must visibly improve task-relevant readiness. A later wrong-object interaction
-does not retroactively invalidate an earlier useful reach. Start semantic failure
-when incorrect targeting or behavior first becomes observably supported, and record
-boundary uncertainty. Backing away can be progress when it visibly enables useful
-realignment; withdrawal alone does not establish improvement.
+Assign one binary label to every segment: failure=true or failure=false.
+Non-failure groups useful progress, successful behavior, neutral behavior, and
+ordinary pauses together. Do not assign a separate progress or neutral label.
+Non-failure does not imply that the instructed task is complete or successful.
 
 Failure means an observable unsuccessful attempt, task-inconsistent action,
 harmful side effect, or sustained unproductive behavior. Lack of immediate progress
 alone is not failure. A brief pause or recording endpoint alone does not establish
 stalling, timeout, or sudden termination. Do not invent hardware faults or damage.
 
-Progress and failure are independent booleans. All four combinations are valid:
-- true/false: progress without a concurrent failure.
-- false/true: failure without concurrent progress.
-- true/true: progress with an independently supported failure or harmful effect.
-- false/false: neither; this is an explicit judgment, not missing annotation.
+If a behavior advances the task while also causing an independently supported
+failure, label it failure=true and record the supported failure categories.
+Useful progress or eventual success does not cancel a concurrent failure.
+Failure=false means no failure is sufficiently supported for that interval;
+material uncertainty must still be recorded and is not a verified negative.
+
+A later wrong-object interaction does not retroactively make an earlier
+non-failing reach a failure. Start semantic failure when incorrect targeting or
+behavior first becomes observably supported, and record boundary uncertainty.
+
+Wrong-object engagement and successful acquisition are separate judgments.
+Label semantic failure when the robot visibly directs an interaction at an
+identifiable incorrect object, even if acquisition is unresolved or unsuccessful.
+Do not require lifting, carriage, or established control to support that task
+error. Incorrect target engagement can support semantic failure independently
+of the physical grasp result. Closure alone, proximity, or approach into an
+ambiguous object cluster does not
+identify which object is engaged. Explain the frame/view evidence distinguishing
+the incorrect target from neighboring objects. Later views may clarify the
+tracked object's identity, but cannot establish an earlier interaction that was
+not visible. If target engagement is unresolved, flag that uncertainty rather
+than backdating from later acquisition. Assess physical grasp failure separately.
 
 A successful episode may contain failures. A semantic error does not make later
 physical behavior irrelevant. Continue checking for missed attempts, control loss,
@@ -80,14 +216,14 @@ reach
 - Start: the first supported directed movement toward that interaction position.
 - End: the interaction begins, the target changes, or the robot withdraws/abandons it.
 - Synonyms: approach; move toward; align before interaction.
-- Counterexample: unrelated arm motion does not establish a reach for a named object.
+- Evidence requirement: movement must be directed toward a supported interaction referent.
 
 grasp
 - Meaning: attempt to establish control of an object.
 - Start: supported engagement or closure directed at acquiring control.
 - End: control is established, the attempt is abandoned, or a distinct retry begins.
 - Synonyms: acquire; take hold; pick up when describing acquisition of control.
-- Counterexample: closing an empty gripper does not establish successful grasp.
+- Evidence requirement: successful acquisition requires supported control of an object.
 - Initial lifting can provide evidence of control; subsequent controlled relocation
   is transport. Do not insert a separate lift merely for a small verification motion.
 
@@ -96,34 +232,35 @@ transport
 - Start: controlled relocation begins after acquisition of control.
 - End: destination positioning ends, control is lost, or another operation begins.
 - Synonyms: carry; move a held object; relocate a held object.
-- Counterexample: moving an empty gripper is not transport of an object.
+- Evidence requirement: transport requires supported object relocation under control.
 - If control is materially unresolved, state that transport is apparent/provisional.
 
 release
 - Meaning: attempt to relinquish control of an object.
-- Start: supported disengagement behavior, such as opening during placement.
+- Start: supported disengagement behavior begins.
 - End: separation is established, the attempt is abandoned, or another operation begins.
 - Synonyms: let go; disengage from a held object.
-- Counterexample: an opening command alone does not establish successful release.
+- Evidence requirement: successful release requires supported physical separation.
 
 withdraw
 - Meaning: move away from an interaction.
 - Start: supported movement away from the interaction begins.
 - End: withdrawal ends or another interaction begins.
 - Synonyms: retract; back away.
-- Counterexample: movement toward the next interaction is reach, not withdrawal
-  solely because distance to the previous object increases.
+- Classify directed movement toward a new interaction as reach; increased distance
+  from the previous interaction alone does not establish withdrawal.
 
 idle
 - Meaning: no substantive interaction or relocation is occurring.
 - Start: substantive activity ends without a new operation beginning.
 - End: substantive activity resumes.
 - Synonyms: pause; remain stationary; hold position without a new operation.
-- Counterexample: tiny pauses within a continuous operation do not require idle segments.
-- Idle is not automatically progress, failure, or task abandonment.
+- Segment idle only when substantive operation has ceased; keep incidental pauses
+  within the continuing operation.
+- Idle is not automatically failure or task abandonment.
 
-Use task-specific operations such as push, pull, rotate, open, close, or insert
-when they describe the operation more precisely. Name the affected object or part
+Use a task-specific operation when it describes the behavior more precisely than
+the core vocabulary. Name the affected object or part
 and the supported before/after change. This vocabulary is not exhaustive: use an
 appropriate ordinary verb and explain it when the core terms do not fit. Use
 unknown only when the operation cannot be resolved, and require review.
@@ -150,32 +287,34 @@ one continuous operation. A new attempt requires an observable reset or renewed
 engagement after completion, interruption, or abandonment. Repeated finger motion
 alone does not establish multiple attempts. Do not split simply to increase count.
 
-Give each atomic action an action_id such as a1, a2, a3 in chronological order.
-Grasp and transport remain different actions even if their progress/failure labels
+Give each atomic action an action_id with the prefix a and a consecutive integer
+suffix starting at 1, in chronological order.
+Grasp and transport remain different actions even if their failure labels
 match. Do not merge different actions solely because their binary labels match.
 
-Within an action, split annotation segments when progress, failure, or the supported
+Within an action, split annotation segments when failure or the supported
 failure-category set changes. These pieces retain the same action_id while the
-operation continues. For example, a brief collision during uninterrupted transport
-creates locally labeled pieces of the same transport action. End the collision
-label when its supported interval ends; do not spread it across the whole transport.
+operation continues. Localize each category to its supported interval within the
+action; do not spread a temporary failure category across the entire operation.
 If the operation itself is interrupted, assign a new action_id to subsequent behavior.
 
 Merge adjacent pieces only when they belong to the same uninterrupted action and
-have the same progress, failure, and category set. A distinct reset/retry receives
+have the same failure label and category set. A distinct reset/retry receives
 a new action_id even if its verb and task labels match the preceding attempt.
 Each action_id occurs in one contiguous block and refers to one operation/attempt.
 
 Give an evidence-based reason for the start of every segment. Use episode_start
 for the first segment; otherwise explain the operation/participant/attempt change
-or local task/failure transition. Changes in wording alone do not justify a boundary.
+or local failure transition. Changes in wording or progress alone do not justify a boundary.
 
 Use consecutive half-open source-frame intervals [start_frame, end_frame), covering
 [0, n_frames) exactly once, including pauses: no gaps, overlaps, or empty intervals.
 The first start is 0, each start equals the previous end, and the final end is n_frames.
-Place each boundary at the first supported transition. Images may be sparse or
-irregular: when timing lies between samples, give an estimate and the bracketing
-source frames in uncertainty; do not imply exact timing. Never cite n_frames as an
+Place action boundaries at supported operation transitions. Failure/category
+onsets follow the observable-failure rule above, independently of action starts.
+Images may be sparse or irregular: explain bracketing source frames in uncertainty;
+action-transition estimates must not backdate positive failure to a hidden event.
+Do not imply exact physical timing. Never cite n_frames as an
 image. Cite only supplied image frames/views. Commands at t follow observation t.
 
 ## Failure categories
@@ -185,13 +324,41 @@ Choose all independently supported categories for each failure segment:
   A barely missed grasp belongs to grasp instead.
 - grasp: failed acquisition or physical grasp/control problems, including an
   incorrect physical grasp, slipping, dropping, or loss of control.
-- manipulation: established control but unsuccessful post-contact manipulation,
-  such as failing to open a held door handle or failing to release as intended.
+- manipulation: established control but unsuccessful post-contact manipulation
+  or disengagement of the interacted object/fixture.
+  Localize this label to observable failed manipulation; do not apply it from the
+  start of an attempt solely because failure is observed later.
 - sequencing_semantic: wrong object, action, destination, or order. Describe the
   observed task inconsistency without claiming a hidden planning defect.
-- collision: supported unintended contact with an obstacle/environment, including
-  displacement, tipping, or obstruction; intended task contact is not a collision.
-  Damage is not required. Motion alone does not prove contact or its cause.
+- collision: supported unwanted physical contact by the robot, gripper, or carried
+  object with another object, fixture, or the environment. Wanted task contact
+  includes grasping the interaction object and supporting a placed object inside
+  its destination. Unwanted contact includes striking a rim or nearby object,
+  or pushing, lifting, tilting, dragging, or obstructing the placement container
+  through contact during placement. Contact that disturbs the container in these
+  ways counts as collision even when placement eventually succeeds. Damage,
+  lasting disruption, and obstruction are not required. Judge unwanted contact
+  by these observable interaction criteria, without inferring the robot's intent.
+  Support may be directly visible contact or a physical
+  reaction in a stable view that clearly links the robot or carried object's
+  interaction to the disturbance. For indirect evidence, cite the before/after
+  frames and explain what links the interaction to the disturbance; the exact
+  contacting part need not be visible if that causal link is supported.
+  Motion alone does not prove contact or its cause. Account for camera motion,
+  especially in the moving wrist view; a change in apparent position or tilt in
+  that view alone is insufficient. Explain which unwanted-contact criterion the
+  evidence supports. An occluded contacting part alone does not make an otherwise
+  supported disturbance unresolved. If contact, its cause, or whether it meets
+  the unwanted-contact criteria remains unresolved, omit
+  collision from categories, set review_required=true, and describe the possible
+  collision, its approximate interval, supporting cues, and unresolved fact in
+  uncertainty. Omission means not sufficiently supported, not confirmed absence.
+  Keep independently supported categories. Do not assert uncertain contact as
+  fact in observed_result or what_happened, or create a segment boundary solely
+  for a suspected collision without a supported action/task-label transition.
+  Start the positive collision label at observable unwanted contact/disturbance,
+  not at the earlier approach or inferred initiating force. A stationary container
+  does not by itself prove contact has ceased; explain material end uncertainty.
 - task_not_attempted: supported absence of a discernible task attempt or sustained
   stalling; do not infer this from an ordinary pause or brief lack of progress.
 - sudden_episode_termination: supported abnormal interruption or cutoff, not merely
@@ -219,22 +386,77 @@ Uncertain consequence judgments require review; do not invent damage or repairs.
 ## Standardized descriptions and uncertainty
 
 Write what_happened using this pattern:
-actor + canonical operation + object/destination + observed result + task effect.
-
-For example: "The robot grasps carton_1 and establishes control. Carton_1 is the
-wrong object for the instructed task." This is illustrative, not an expected label.
+actor + canonical operation + object/destination + observed result + failure effect, if any.
 
 Prefer the robot as the action subject. Use robot arm or robot gripper when the
 part-specific motion/state matters. Preserve stable object/destination identifiers.
-Keep natural, concise descriptions; do not output keyword lists or boilerplate.
+Use the stable identifier based on the instruction's term for a supported matching
+referent, rather than alternating between the instruction term and packaging
+names. Use an evidence-supported actual name for mismatches and a generic name
+for unresolved identities, as specified above. Put detailed appearance and
+identity evidence in identity_check. Do not substitute a pronoun when its referent
+could be confused with another participant.
+
+Use the canonical action verb consistently in both action and what_happened:
+reach/reaches, grasp/grasps, transport/transports, release/attempts to release,
+withdraw/withdraws, and idle/idles. The vocabulary's synonyms explain recognition;
+use the canonical output verb consistently instead of substituting synonyms for
+the same operation. Supported task-specific verbs remain allowed.
+An attempt marker is required when successful acquisition or separation is not
+established; use "grasps ... and establishes control" or "releases ... and
+establishes separation" only when that result is supported.
+
+Write short sentences in a stable order: operation and participants, then concrete
+physical result, then the supported failure effect when applicable. Use these
+result phrases when the corresponding fact is supported:
+- alignment for grasp: "The gripper aligns around <object>". When the same
+  surrounding alignment is supported, do not alternate this phrase with
+  "reaches the interaction position around <object>" or "straddles <object>".
+  Preserve a different spatial relation when supported; alignment does not prove
+  contact or acquisition.
+- acquisition: "establishes control of <object>".
+- continued carriage: "<object> remains under gripper control".
+- separation: "<object> separates from the gripper".
+- retained support: "<object> remains supported inside/on <destination>";
+  choose the observed spatial relation, preserving inside/on/outside distinctions.
+  Use this phrase only when retained support is independently established;
+  do not append it automatically after separation or destination entry.
+- unresolved separation: record the evidence uncertainty separately; describe
+  the best-supported physical judgment as provisional when it cannot be verified.
+- delayed separation: "Separation is delayed"; specify observed continued
+  object/gripper motion when supported, without inventing an attachment mechanism.
+- environmental disturbance: "Contact displaces/lifts/tilts/drags/obstructs
+  <object or fixture>"; choose only the supported effect or effects.
+- wrong-object behavior: "<actual object> is not the requested <task object>";
+  use only when object mismatch is supported.
+
+For a reach, describe directed movement toward the supported referent followed
+by the supported alignment result using the canonical result phrase. Use the
+same alignment judgment as the physical result in observed_result; append
+additional material motion or spatial facts only when supported. If alignment
+has not yet occurred, state that the gripper has not yet aligned around the
+object; if the result is uncertain, mark the best-supported judgment provisional.
+Do not require every reach to achieve alignment or insert acquisition, contact,
+or task completion into a reach.
+
+Describe explicit object support, separation, location, and motion rather than
+generic completion claims. For withdrawal after placement, describe withdrawal
+separately from the object's retained support/location when those facts are
+visible. Omit unsupported facts and retain different outcomes explicitly.
+
+Keep observed_result and what_happened consistent about the physical result.
+Do not add stock sentences merely to share keywords. Preserve additional material
+facts, including further disturbance or its supported absence, rather than forcing
+different observations into one phrase. Keep natural, concise descriptions;
+do not output keyword lists or boilerplate.
 Preserve attempts, negation, uncertainty, actor/object roles, concurrent effects,
 and temporal order. Attempts to release must never be normalized into releases.
 
 When an action, identity, task judgment, result, or boundary is materially uncertain,
 set review_required=true and explain the missing/conflicting evidence. Assign the
-best-supported progress/failure pair for coverage, but explicitly mark affected
+best-supported failure boolean for coverage, but explicitly mark affected
 judgments provisional. A provisional no is not a verified negative. Never default
-to false/false solely because evidence is missing. Identity uncertainty must not
+to failure=false solely because evidence is missing. Identity uncertainty must not
 erase an independently visible physical failure.
 
 ## Input and response format
@@ -255,7 +477,8 @@ identity_check has exactly:
 - uncertainty: material identity uncertainty, or an empty string.
 
 segments is a nonempty complete partition of [0, n_frames). Each segment has exactly:
-- start_frame: inclusive integer.
+- start_frame: inclusive integer; for a newly positive failure/category, the first
+  supplied observation supporting that observable failure, not its inferred cause.
 - end_frame: exclusive integer.
 - action_id: chronological atomic action identifier; preserve it across local
   label-change splits of the same action.
@@ -265,9 +488,9 @@ segments is a nonempty complete partition of [0, n_frames). Each segment has exa
 - destination_id: stable destination identifier, or null if not applicable/unresolved.
 - observed_result: concise observed physical result, or an explicit unresolved result.
 - boundary_reason: evidence-based explanation of this segment's start.
-- progress: JSON boolean.
 - failure: JSON boolean.
-- what_happened: the standardized natural description and task effect.
+- what_happened: canonical action, concrete physical result, and any supported
+  failure effect, using the standardized wording above.
 - categories: a nonempty subset of the failure-category identifiers above when
   failure=true; otherwise an empty array.
 - recovery: suggested recovery when failure=true; otherwise null.
@@ -282,5 +505,11 @@ segments is a nonempty complete partition of [0, n_frames). Each segment has exa
 
 Before returning, check full coverage, atomic action boundaries, local failure
 timing, supported evidence, stable identities, and consistency among action,
-physical result, progress, failure, and categories. Check all applicable failure
+physical result, failure, and categories. Check all applicable failure
 categories through the final image without forcing any failure to exist.
+For every claimed resulting state, check that the cited evidence establishes that
+state rather than merely its preceding transition or an expected later outcome.
+Stop outcome claims at the last supplied observation; flag unverified end states.
+For every positive failure/category onset, verify that cited observations support
+failure at that time. Reject backdating based only on a later outcome, an earlier
+action/command start, or attribution of responsibility.

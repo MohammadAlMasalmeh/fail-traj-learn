@@ -1,0 +1,21 @@
+{
+  "name": "Atomic action annotation: Astra versus Sol",
+  "shared_prompt": "annotation.txt",
+  "models": {
+    "astra": {
+      "model": "gpt-6-astra",
+      "prompt": "annotation.txt"
+    },
+    "sol": {
+      "model": "gpt-6.1-sol",
+      "prompt": "annotation.txt"
+    }
+  },
+  "comparison_rules": [
+    "Both models use the same shared prompt file: annotation.txt.",
+    "Supply identical task metadata, camera evidence, timestamps, and telemetry to both models.",
+    "Label independently without predictions or reference labels from other models or earlier runs.",
+    "Use fresh run outputs; preserve the prompt and input evidence used for that run."
+  ],
+  "output_contract": "Atomic action fields and linked local task/failure segments are defined in the shared prompt; historical state-only validators do not implement this contract."
+}

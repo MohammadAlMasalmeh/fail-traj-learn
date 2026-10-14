@@ -10,9 +10,10 @@ body{max-width:1280px}.player{padding:12px 20px}.cameras{max-width:500px;margin:
 @media(min-width:901px) and (max-height:850px){.review-main .cameras{max-width:300px}.review-main .card{padding:10px}.review-main .card p{margin:5px 0}.review-main .card p:empty{display:none}.review-main .track{height:30px}.review-main .seg{height:26px}.review-main .model h2{margin-bottom:6px}.review-main .axis{margin-bottom:6px}}
 @media(min-width:901px) and (max-height:750px){.review-main .cameras{max-width:260px}}
 @media(max-width:900px){.review-workspace{grid-template-columns:minmax(0,1fr)}#scoreSidebar{position:static;max-height:none;grid-row:1}.review-main{grid-row:2}#agreement table{font-size:12px}}
+.seg.nonfailure{background:#647287}.card.nonfailure{border-color:#8d9bab}
 </style>
 <h1 id="heading">GPT vs Gemini · failure taxonomy</h1>
-<p class="muted">Provisional model annotations, not ground truth. Green = progress; red = failure; striped = both; gray = neither. Atomic action annotations include operation, object, physical result, and boundary explanations. Unavailable outputs remain blank.</p>
+<p class="muted">Provisional model annotations, not ground truth. Red = failure; gray = non-failure, including progress and neutral behavior. Actions, physical results, categories, and uncertainty remain available. Unavailable outputs remain blank.</p>
 <div class="bar"><label>Prompt <select id="run"></select></label><a id="promptLink" target="_blank">Read exact prompt</a><a id="rightPromptLink" target="_blank" hidden></a><label>Episode <select id="episode"></select></label><label>Evidence <select id="mode"><option value="full">Full original episode</option><option value="sampled">Frames received by left model</option><option value="right_sampled">Frames received by right model</option></select></label></div>
 <h2 id="task"></h2><div id="error" role="alert"></div>
 <div class="review-workspace">
@@ -22,49 +23,68 @@ body{max-width:1280px}.player{padding:12px 20px}.cameras{max-width:500px;margin:
 <div class="bar"><button id="back">Previous frame</button><button id="play">Play</button><button id="forward">Next frame</button><label>Speed <select id="speed"><option value="0.25">0.25x</option><option value="0.5">0.5x</option><option value="1" selected>1x</option></select></label><span id="clock"></span></div>
 <input id="scrub" type="range" min="0" value="0" aria-label="Source frame">
 </section>
-<div class="bar legend"><span class="swatch progress">Progress</span><span class="swatch failure">Failure</span><span class="swatch both">Both</span><span class="swatch neither">Neither</span><span class="muted">Click a numbered segment to view its annotation below.</span><label><input type="checkbox" id="allSegments"> Show all annotations</label></div>
+<div class="bar legend"><span class="swatch failure">Failure</span><span class="swatch neither">Non-failure</span><span class="muted">Click a numbered segment to view its annotation below.</span><label><input type="checkbox" id="allSegments"> Show all annotations</label></div>
 <div class="compare">
 <section class="panel model"><h2 id="title_openai">GPT</h2><div id="budget_openai" class="muted"></div><span id="trackTitle_openai" hidden></span><div id="track_openai" class="track"></div><div class="axis" id="axis_openai"></div><div id="openai"></div></section>
 <section class="panel model"><h2 id="title_gemini">Gemini</h2><div id="budget_gemini" class="muted"></div><span id="trackTitle_gemini" hidden></span><div id="track_gemini" class="track"></div><div class="axis" id="axis_gemini"></div><div id="gemini"></div></section>
 </div>
 <div id="current" class="muted"></div>
-<details><summary>Jump to categorical disagreements</summary><p class="muted">Includes progress/failure state and category-set differences; descriptions can disagree even when categories match.</p><div id="jumps"></div></details>
+<details><summary>Jump to categorical disagreements</summary><p class="muted">Includes failure/non-failure and category-set differences; descriptions can disagree even when categories match.</p><div id="jumps"></div></details>
 <details><summary>Review notes (saved in this browser)</summary><textarea id="notes" placeholder="Your observations; not submitted as ground truth"></textarea><button id="export">Download notes</button></details>
 </div>
-<aside class="panel" id="scoreSidebar" aria-label="Annotation comparison scores"><div id="agreement"></div><div id="llmScore" style="margin-top:16px;padding-top:16px;border-top:1px solid #34485e" aria-live="polite"></div><div id="textScore" style="margin-top:16px;padding-top:16px;border-top:1px solid #34485e" aria-live="polite"></div></aside>
+<aside class="panel" id="scoreSidebar" aria-label="Annotation comparison scores"><div id="agreement"></div><div id="actionAgreement" style="margin-top:16px;padding-top:16px;border-top:1px solid #34485e"></div><div id="llmScore" style="margin-top:16px;padding-top:16px;border-top:1px solid #34485e" aria-live="polite"></div><div id="textScore" style="margin-top:16px;padding-top:16px;border-top:1px solid #34485e" aria-live="polite"></div></aside>
 </div>
 <script>
-const $=id=>document.getElementById(id),providers=['openai','gemini'];let data,ep,frame=0,timer=null;const textScores=new Map();let textScoreStatus="loading";
-const llmScores=new Map();let llmScoreStatus='loading',llmEvaluation;
+const $=id=>document.getElementById(id),providers=['openai','gemini'];let data,ep,frame=0,timer=null;const textScores=new Map(),textScoreRows=new Map();let textScoreStatus="loading",textEvaluation;
+const llmScores=new Map(),meanTextScores=new Map();let llmScoreStatus='loading',llmEvaluation;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function runInfo(){return data?.runs.find(r=>r.id===$('run').value)}
 function columnName(p){return runInfo()?.columns?.[p]||p}
-function segmentState(s){if(typeof s.progress==='boolean'&&typeof s.failure==='boolean')return s.progress?(s.failure?'both':'progress'):(s.failure?'failure':'neither');return s.categories?'failure':'unknown'}
-function segmentLabel(s){if(typeof s.progress==='boolean')return `Progress: ${s.progress?'yes':'no'}; failure: ${s.failure?'yes':'no'}`+(s.categories.length?' | '+[...s.categories].sort().join(' + '):'');return s.categories?[...s.categories].sort().join(' + '):'uncertain'}
-function label(provider,f){let a=ep.annotations[provider];if(!a)return 'unavailable';if((a.uncertain_intervals||[]).some(s=>s.start_frame<=f&&f<s.end_frame))return 'uncertain';let active=a.segments.filter(s=>s.start_frame<=f&&f<s.end_frame);if(active.some(s=>typeof s.progress==='boolean'))return active.map(segmentLabel).join('; ');return active.length?[...new Set(active.flatMap(s=>s.categories))].sort().join(' + '):'no failure annotated'}
+function segmentState(s){if(typeof s.failure==='boolean')return s.failure?'failure':'nonfailure';return s.categories?.length?'failure':'unknown'}
+function segmentLabel(s){if(typeof s.failure==='boolean')return (s.failure?'Failure':'Non-failure')+(s.categories.length?' | '+[...s.categories].sort().join(' + '):'');return s.categories?[...s.categories].sort().join(' + '):'uncertain'}
+function label(provider,f){let a=ep.annotations[provider];if(!a)return 'unavailable';if((a.uncertain_intervals||[]).some(s=>s.start_frame<=f&&f<s.end_frame))return 'uncertain';let active=a.segments.filter(s=>s.start_frame<=f&&f<s.end_frame);if(active.some(s=>typeof s.failure==='boolean'))return active.map(segmentLabel).join('; ');return active.length?[...new Set(active.flatMap(s=>s.categories))].sort().join(' + '):'no failure annotated'}
 function evidenceHtml(items){return items.map(e=>`<p><button data-seek="${e.frame}">${e.frame} / ${esc(e.camera)}</button> ${esc(e.observation)}</p>`).join('')}
 function atomicDetails(s){
  if(!s.action)return '';
  const participants=[s.object_id,s.destination_id].filter(Boolean).map(esc).join(' &rarr; ');
  return `<p><b>Action:</b> ${esc(s.action_id)} &middot; ${esc(s.action)}${participants?' &middot; '+participants:''}</p><p><b>Physical result:</b> ${esc(s.observed_result)}</p><p><b>Boundary:</b> ${esc(s.boundary_reason)}</p>`;
 }
-function segmentCard(s,i){let state=segmentState(s);return `<article class="card ${state}" data-start="${s.start_frame}" data-end="${s.end_frame}"><button data-seek="${s.start_frame}">Segment ${i+1} | ${(s.start_frame/ep.fps).toFixed(2)}-${(s.end_frame/ep.fps).toFixed(2)} s</button><p class="state"><b>${({progress:'Progress',failure:'Failure',both:'Progress + failure',neither:'Neither',unknown:'Uncertain'})[state]}</b></p><p>${s.categories.map(c=>`<span class="badge">${esc(c.replaceAll('_',' '))}</span>`).join('')}</p>${atomicDetails(s)}<p>${esc(s.what_happened)}</p>${s.recovery!=null?`<p><b>Recovery:</b> ${esc(s.recovery)}</p><p class="muted">Severity: ${esc(s.severity)} | Resetability: ${esc(s.resetability)}</p>`:''}${s.review_required?'<p class="notice">Review required</p>':''}${s.uncertainty?`<p><b>Uncertainty:</b> ${esc(s.uncertainty)}</p>`:''}<details><summary>Evidence and frame details</summary><p>Frames [${s.start_frame}, ${s.end_frame})</p>${typeof s.progress==='boolean'?`<p>Progress: ${s.progress?'yes':'no'} | Failure: ${s.failure?'yes':'no'}</p>`:''}${s.object_ids?`<p>Objects: ${esc(s.object_ids.join(', '))}</p>`:''}${s.evidence?evidenceHtml(s.evidence):''}${s.evidence_frames?evidenceHtml(s.evidence_frames.map(frame=>({frame,camera:'both views',observation:''}))):''}${s.potential_risk!==undefined?`<p>Potential risk: ${esc(s.potential_risk)}</p>`:''}${s.start_window?`<p>Start window: ${esc(JSON.stringify(s.start_window))}; end window: ${esc(JSON.stringify(s.end_window))}</p>`:''}</details></article>`}
+function segmentCard(s,i){let state=segmentState(s);return `<article class="card ${state}" data-start="${s.start_frame}" data-end="${s.end_frame}"><button data-seek="${s.start_frame}">Segment ${i+1} | ${(s.start_frame/ep.fps).toFixed(2)}-${(s.end_frame/ep.fps).toFixed(2)} s</button><p class="what-happened">${esc(s.what_happened)}</p><p class="state"><b>${({failure:'Failure',nonfailure:'Non-failure',unknown:'Uncertain'})[state]}</b></p><p>${s.categories.map(c=>`<span class="badge">${esc(c.replaceAll('_',' '))}</span>`).join('')}</p>${atomicDetails(s)}${s.recovery!=null?`<p><b>Recovery:</b> ${esc(s.recovery)}</p><p class="muted">Severity: ${esc(s.severity)} | Resetability: ${esc(s.resetability)}</p>`:''}${s.review_required?'<p class="notice">Review required</p>':''}${s.uncertainty?`<p><b>Uncertainty:</b> ${esc(s.uncertainty)}</p>`:''}<details><summary>Evidence and frame details</summary><p>Frames [${s.start_frame}, ${s.end_frame})</p>${typeof s.failure==='boolean'?`<p>Failure: ${s.failure?'yes':'no'}</p>`:''}${s.object_ids?`<p>Objects: ${esc(s.object_ids.join(', '))}</p>`:''}${s.evidence?evidenceHtml(s.evidence):''}${s.evidence_frames?evidenceHtml(s.evidence_frames.map(frame=>({frame,camera:'both views',observation:''}))):''}${s.potential_risk!==undefined?`<p>Potential risk: ${esc(s.potential_risk)}</p>`:''}${s.start_window?`<p>Start window: ${esc(JSON.stringify(s.start_window))}; end window: ${esc(JSON.stringify(s.end_window))}</p>`:''}</details></article>`}
 
 function textSimilarityAt(annotations,f){
+ if(!annotations)return undefined;
+ if(textEvaluation?.annotation_manifest_sha256 && textEvaluation.annotation_manifest_sha256!==data?.annotation_manifest_sha256)return undefined;
  const active=p=>{const a=annotations[p];if(!a||(a.uncertain_intervals||[]).some(s=>s.start_frame<=f&&f<s.end_frame))return null;const ss=a.segments.filter(s=>s.start_frame<=f&&f<s.end_frame);return ss.length===1?ss[0].what_happened:null};
  const left=active('openai'),right=active('gemini');
  return left&&right?textScores.get(JSON.stringify([left,right])):undefined;
 }
+function meanTextSimilarity(episode,run){
+ const key=JSON.stringify([episode.id,run]);
+ if(meanTextScores.has(key))return meanTextScores.get(key);
+ let sum=0,covered=0;
+ for(let f=0;f<episode.n_frames;f++){
+  const score=textSimilarityAt(episode.versions[run],f);
+  if(Number.isFinite(score)){sum+=score;covered++}
+ }
+ const result={sum,covered,total:episode.n_frames};
+ if(textScoreStatus==='ready')meanTextScores.set(key,result);
+ return result;
+}
 function showTextScore(){
  const score=textSimilarityAt(ep.annotations,frame);
- $('textScore').innerHTML=`<b>Frame ${frame} text similarity: ${score==null?(textScoreStatus==='loading'?'loading...':'unavailable'):score.toFixed(3)}</b><div class="muted">STS DistilRoBERTa &middot; active descriptions &middot; score range 0 to 1; higher means more similar. Both input orders are averaged. This is not a percentage of agreement. Scores stay constant while the description pair stays the same.</div>`;
+ const run=$('run').value,current=meanTextSimilarity(ep,run);
+ const overall=data.episodes.map(e=>meanTextSimilarity(e,run)).reduce((a,b)=>({sum:a.sum+b.sum,covered:a.covered+b.covered,total:a.total+b.total}),{sum:0,covered:0,total:0});
+ const formatMean=r=>r.covered===r.total&&r.total?(r.sum/r.total).toFixed(3):(textScoreStatus==='loading'?'loading...':'unavailable');
+ const coverage=r=>`${r.covered} / ${r.total} frames scored`+(r.covered<r.total&&r.covered?`; scored-frame mean ${(r.sum/r.covered).toFixed(3)}`:'');
+ $('textScore').innerHTML=`<b>Frame ${frame} raw text baseline: ${score==null?(textScoreStatus==='loading'?'loading...':'unavailable'):score.toFixed(3)}</b><p><b>Episode mean: <span id="episodeMean">${formatMean(current)}</span></b><br><span class="muted">${coverage(current)}</span></p><p><b>All episodes mean: <span id="overallMean">${formatMean(overall)}</span></b><br><span class="muted">${coverage(overall)}</span></p><div class="muted">STS DistilRoBERTa &middot; raw learned prediction, averaged across both input orders. Values are not calibrated percentages of semantic agreement. High scores can miss contradictions. Means weight each pair by covered frames; missing scores are not zero. Text agreement does not establish video correctness.</div>${textEvaluation?.experiment_report?`<p><a href="${esc(textEvaluation.experiment_report)}" target="_blank">Text scoring experiments</a></p>`:''}`;
 }
 function showLLMScore(){
  const panel=$('llmScore');
  if($('run').value!=='atomic_actions'){panel.innerHTML='<b>LLM description agreement</b><p class="muted">Available for the new atomic action comparison.</p>';return}
+ if(llmScoreStatus==='ready' && data.annotation_manifest_sha256 && !Object.entries(llmEvaluation.source_hashes||{}).some(([path,digest])=>path.endsWith('/manifest.json')&&digest===data.annotation_manifest_sha256)){panel.innerHTML='<b>LLM description agreement</b><p class="muted">Scores belong to a different annotation batch.</p>';return}
  const indices=providers.map(p=>ep.annotations[p]?.segments.findIndex(s=>s.start_frame<=frame&&frame<s.end_frame));
  const result=llmScores.get(JSON.stringify([ep.id,...indices]));
- if(!result){panel.innerHTML=`<b>LLM description agreement: ${llmScoreStatus==='loading'?'loading...':'unavailable'}</b>`;return}
+ if(!result){panel.innerHTML=`<b>LLM description agreement</b><p class="muted">${llmScoreStatus==='loading'?'Loading...':'Not scored for this batch. Annotation reruns do not automatically run an LLM judge.'}</p>`;return}
  const {ab,ba}=result.judgments;
  const interpretations=['unrelated','contradiction','material difference','minor difference','equivalent'];
  const meaning=ab.score===ba.score?interpretations[ab.score-1]:`${interpretations[Math.min(ab.score,ba.score)-1]} / ${interpretations[Math.max(ab.score,ba.score)-1]}`;
@@ -79,21 +99,32 @@ function step(d){stop();if($('mode').value!=='full'){let fs=selectedFrames();see
 function toggle(){if(timer){stop();return}if(frame===ep.n_frames-1)seek(0);$('play').textContent='Pause';timer=setInterval(()=>{if(frame>=ep.n_frames-1)stop();else seek(frame+1)},1000/ep.fps/Number($('speed').value))}
 function key(){return 'taxonomy-review-'+$('run').value+'-'+ep.id}
 function agreementScores(left,right,n){
- const valid=a=>a&&!(a.uncertain_intervals||[]).length&&a.segments.length&&a.segments.every((s,i)=>Number.isInteger(s.start_frame)&&Number.isInteger(s.end_frame)&&s.start_frame===(i?a.segments[i-1].end_frame:0)&&s.end_frame>s.start_frame&&typeof s.progress==='boolean'&&typeof s.failure==='boolean'&&Array.isArray(s.categories))&&a.segments.at(-1).end_frame===n;
+ const valid=a=>a&&!(a.uncertain_intervals||[]).length&&a.segments.length&&a.segments.every((s,i)=>Number.isInteger(s.start_frame)&&Number.isInteger(s.end_frame)&&s.start_frame===(i?a.segments[i-1].end_frame:0)&&s.end_frame>s.start_frame&&typeof s.failure==='boolean'&&Array.isArray(s.categories))&&a.segments.at(-1).end_frame===n;
  if(!valid(left)||!valid(right))return null;
  const categories=s=>JSON.stringify([...new Set(s.categories)].sort());
- let matched=0;
+ let matched=0,categoryMatched=0;
  for(const x of left.segments)for(const y of right.segments){
-  if(x.progress===y.progress&&x.failure===y.failure&&categories(x)===categories(y))
-   matched+=Math.max(0,Math.min(x.end_frame,y.end_frame)-Math.max(x.start_frame,y.start_frame));
+  if(x.failure===y.failure){
+   const overlap=Math.max(0,Math.min(x.end_frame,y.end_frame)-Math.max(x.start_frame,y.start_frame));
+   matched+=overlap;
+   if(categories(x)===categories(y))categoryMatched+=overlap;
+  }
  }
- return {frames:matched/n,matched,total:n};
+ return {frames:matched/n,categoryFrames:categoryMatched/n,matched,total:n};
 }
 function showAgreement(){
+ showActionAgreement();
  const s=agreementScores(ep.annotations.openai,ep.annotations.gemini,ep.n_frames);
- const title=`<h3 style="margin-top:0">${esc(ep.id)} frame agreement</h3><p class="muted">${esc(columnName('openai'))} &harr; ${esc(columnName('gemini'))}.</p>`;
- if(!s){$('agreement').innerHTML=title+'<p>Agreement unavailable: both annotations must provide complete, non-overlapping progress/failure labels. Missing or incomplete outputs are not scored as zero.</p>';return}
- $('agreement').innerHTML=title+`<p style="font-size:28px;font-weight:700">${(s.frames*100).toFixed(1)}%</p><p class="muted">${s.matched} / ${s.total} frames agree.</p><details><summary>How frame agreement works</summary><p>A frame agrees when both progress/failure labels and the failure-category set match. Agreement is matching frames divided by total episode frames. Segment splits do not affect the score when labels stay the same. Descriptions are not compared. Agreement does not measure correctness.</p></details>`;
+ const title=`<h3 style="margin-top:0">${esc(ep.id)} failure/non-failure agreement</h3><p class="muted">${esc(columnName('openai'))} &harr; ${esc(columnName('gemini'))}.</p>`;
+ if(!s){$('agreement').innerHTML=title+'<p>Agreement unavailable: both annotations must provide complete, non-overlapping failure labels. Missing or incomplete outputs are not scored as zero.</p>';return}
+ $('agreement').innerHTML=title+`<p style="font-size:28px;font-weight:700">${(s.frames*100).toFixed(1)}%</p><p class="muted">${s.matched} / ${s.total} frames agree.</p><p>Failure-category frame agreement: <b>${(s.categoryFrames*100).toFixed(1)}%</b></p><details><summary>How frame agreement works</summary><p>The main score compares only failure versus non-failure, grouping progress and neutral behavior together. Any concurrent failure counts as failure. Category frame agreement additionally requires the category sets to match. Segment splits do not affect either score when labels stay the same. Descriptions are not compared. Agreement does not measure correctness.</p></details>`;
+}
+function showActionAgreement(){
+ const row=ep.action_agreement_versions?.[$('run').value],panel=$('actionAgreement');
+ if(!row){panel.hidden=true;panel.replaceChildren();return}
+ panel.hidden=false;
+ const percent=v=>v==null?'N/A':`${(v*100).toFixed(1)}%`,s=row.scores,c=row.counts;
+ panel.innerHTML=`<h3 style="margin-top:0">Action/category agreement</h3><table><tr><td>Action occurrences</td><td><b>${percent(s.action_agreement)}</b></td></tr><tr><td>Categories per action</td><td><b>${percent(s.category_agreement)}</b></td></tr><tr><td>Combined</td><td><b>${percent(s.combined_agreement)}</b></td></tr></table><p class="muted">${c.left_actions} / ${c.right_actions} actions; ${c.left_segments} / ${c.right_segments} segments.</p><details><summary>How action agreement works</summary><p>Consecutive segments sharing an action ID are grouped. Groups are matched in temporal order by overlap. Matching operations and each shared category within an action count once, using symmetric Dice. Extra splits within an action do not change the score.</p><p>These scores compare operation names and assigned categories. They do not score object identity, destination, physical result, descriptions, failure/non-failure labels, uncertainty, or precise category timing. Agreement does not establish correctness.</p>${runInfo()?.action_agreement_file?`<a href="${esc(runInfo().action_agreement_file)}" target="_blank">Inspect action matches and original segments</a>`:''}</details>`;
 }
 function show(){stop();for(let p of providers){$('title_'+p).textContent=columnName(p);$('trackTitle_'+p).textContent=columnName(p)}$('heading').textContent=runInfo()?.heading||'Trajectory annotation comparison';ep=data.episodes[Number($('episode').value)];ep.annotations=ep.versions[$('run').value];$('promptLink').href=runInfo()?.prompt_file||$('run').value+'_prompt.txt';$('promptLink').textContent=runInfo()?.prompt_label||'Read exact prompt';$('rightPromptLink').hidden=!runInfo()?.right_prompt_file;if(runInfo()?.right_prompt_file){$('rightPromptLink').href=runInfo().right_prompt_file;$('rightPromptLink').textContent=runInfo().right_prompt_label}$('task').textContent=ep.task;$('scrub').max=ep.n_frames-1;try{$('notes').value=localStorage.getItem(key())||''}catch{$('notes').value=''}
 for(let p of providers){let a=ep.annotations[p],track=$(`track_${p}`);track.replaceChildren();$(p).replaceChildren();if(a){for(let [index,s] of [...a.segments,...(a.uncertain_intervals||[])].entries()){let unknown=!s.categories,b=document.createElement('button');b.className='seg '+segmentState(s);b.style.left=100*s.start_frame/ep.n_frames+'%';b.style.width=100*(s.end_frame-s.start_frame)/ep.n_frames+'%';b.textContent=index+1;b.setAttribute('aria-label',`Segment ${index+1}: ${segmentLabel(s)}`);b.title=`[${s.start_frame},${s.end_frame}) ${segmentLabel(s)}`;b.onclick=e=>{e.stopPropagation();stop();seek(s.start_frame)};track.append(b)}
@@ -107,6 +138,6 @@ $('run').onchange=show;$('episode').onchange=show;$('mode').onchange=()=>{stop()
 $('export').onclick=()=>{let a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify({episode:ep.id,notes:$('notes').value,status:'review_notes_not_ground_truth'},null,2)],{type:'application/json'}));a.href=url;a.download=ep.id+'_review_notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 document.onkeydown=e=>{if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();toggle()}if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}if(e.key==='ArrowRight'){e.preventDefault();step(1)}};
 fetch('llm_semantic_similarity.json').then(r=>{if(!r.ok)throw Error('LLM scores unavailable');return r.json()}).then(d=>{if(d.run!=='atomic_actions')throw Error('Unexpected evaluation run');llmEvaluation=d;for(const p of d.pairs)llmScores.set(JSON.stringify([p.episode,p.left_index,p.right_index]),p);llmScoreStatus='ready';if(ep)showLLMScore()}).catch(()=>{llmScoreStatus='unavailable';if(ep)showLLMScore()});
-fetch('text_similarity.json').then(r=>{if(!r.ok)throw Error('Text scores unavailable');return r.json()}).then(d=>{for(const p of d.pairs)textScores.set(JSON.stringify([p.left,p.right]),p.score);textScoreStatus='ready';if(ep)showTextScore()}).catch(()=>{textScoreStatus='unavailable';if(ep)showTextScore()});
+fetch('text_similarity.json').then(r=>{if(!r.ok)throw Error('Text scores unavailable');return r.json()}).then(d=>{textEvaluation=d;meanTextScores.clear();for(const p of d.pairs){textScores.set(JSON.stringify([p.left,p.right]),p.score);textScoreRows.set(JSON.stringify([p.left,p.right]),p)}textScoreStatus='ready';if(ep)showTextScore()}).catch(()=>{textScoreStatus='unavailable';if(ep)showTextScore()});
 fetch('data.json').then(r=>{if(!r.ok)throw Error('Could not load annotations');return r.json()}).then(d=>{data=d;data.runs.forEach(r=>{let o=document.createElement('option');o.value=r.id;o.textContent=r.label;$('run').append(o)});const params=new URLSearchParams(location.search);$('run').value=data.runs.some(r=>r.id===params.get('run'))?params.get('run'):data.default_run;data.episodes.forEach((e,i)=>{let o=document.createElement('option');o.value=i;o.textContent=e.id;$('episode').append(o)});const requested=data.episodes.findIndex(e=>e.id===params.get('episode'));if(requested>=0)$('episode').value=requested;show();if(params.has('frame')){const f=Number(params.get('frame'));if(Number.isFinite(f))seek(f)}}).catch(e=>$('error').textContent=e.message);
 </script></html>

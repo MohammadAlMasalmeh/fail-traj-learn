@@ -24,12 +24,18 @@ CHECKS = [
     ("R005", "regrasp miss ~270", True, lambda x: hit(x, "grasp", 262, 280)),
     ("R005", "false wrong-object", False, lambda x: hit(x, "sequencing_semantic", 0, 280)),
     ("R005", "false attachment after drop (190-260)", False, lambda x: hit(x, "manipulation", 190, 260)),
+    # Held-out events verified by frame strips (R007 lid shrinks as gripper rises; R008 upright bottle toppled).
+    ("R007", "first grasp misses (60-85)", True, lambda x: hit(x, "grasp", 60, 85)),
+    ("R007", "no false release/drop failure (75-90)", False, lambda x: any(
+        s["failure"] and s["action"] == "release" and s["start_frame"] < 90 and s["end_frame"] > 75
+        for s in x["segments"])),
+    ("R008", "toppling collision (100-140)", True, lambda x: hit(x, "collision", 95, 140)),
 ]
 
 def main(runs):
     rows = []
     for run in runs:
-        for tag in ("haiku", "sonnet"):
+        for tag in ("haiku", "sonnet", "opus"):
             res, n = [], 0
             for ep, desc, expected, pred in CHECKS:
                 f = Path(run) / "answers" / f"{ep}_{tag}.json"

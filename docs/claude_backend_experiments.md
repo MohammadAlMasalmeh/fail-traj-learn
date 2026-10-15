@@ -147,3 +147,20 @@ reference. Differences were in calibration only: first-pass schema failures V8
 0.00. The auditor made no changes, as expected for drafts without detectable
 errors. This supports adopting rules 1-2 and using the audit as an error-catching
 pass; it does not test the audit's error-fixing on new data (no errors occurred).
+
+## Opus (day 2)
+
+Opus (V8 prompt) on R001, R004, R005, R007, R008, and Opus as auditor on the V8
+Sonnet drafts of R004 (dev), R007 and R008 (held-out). `claude_events.py` gained
+three strip-verified held-out checks (R007 first grasp misses; R007 no false
+drop; R008 toppling collision).
+
+- Single pass: Opus 10/13 events vs Sonnet 10/13 on the same checks, with
+  different errors. Opus alone found R001's delayed separation and avoided R007's
+  false drop under V8, but kept the telemetry-induced false slips (R001, R004).
+- Audit: Opus removed R004's false slip (citing the agent view), which the Sonnet
+  audit left unchanged; it reproduced the Sonnet audit's R007 corrections and
+  only refined the already-correct R008 draft (collision onset 105 -> 100,
+  consistent with the frame strip). No false positives in three Opus audits.
+- Recommendation update: draft with Sonnet or Haiku (+ rules 1-2), audit with
+  Opus. Per-call cost is similar (~90-110k subagent tokens).

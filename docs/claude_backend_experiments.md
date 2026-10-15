@@ -105,3 +105,32 @@ but did not improve held-out recall (v4 Sonnet missed the R008 collision that V8
 found), so their dev gains are at least partly fit to R001-R006. Run-to-run
 variance is large: identical prompt and model detected R004's delayed separation
 in one of two runs. Single-run differences of one event are not evidence.
+
+## Later experiments
+
+- **EV (event-aware sampling, `--event-frames`).** Adds frames at -4..+10 (step 2)
+  around every gripper-command change and every second frame of the last 12.
+  With the unchanged V8 prompt it let Sonnet find R001's delayed separation;
+  with v4 it found R008's collision. It did not remove false slips, and v4 + events
+  revived R005's false attachment (dev events 6/10).
+- **R009 reference revised (v3).** The bottle is beside the basket only in the
+  final frame and may still be falling; V8 forbids inferring an unobserved end
+  state, and all models flagged that segment for review. The placement outcome is
+  review-only and unscored. Held-out under v3: V8 Sonnet recall/precision
+  1.00/1.00, v4 Sonnet 0.83/1.00, V8 Haiku 0.83/0.67, v4 Haiku 0.83/1.00.
+- **AU (second-pass Sonnet audit, `references/claude/auditor_brief.txt`).** A
+  checklist audit of an existing annotation against the same frames. Held-out:
+  fixed a false lift/drop in R007 (strip-verified), wording only in R010, no
+  change in R008/R009. Dev: fixed R001's missed delayed separation (V8 Sonnet
+  draft) and R005's referent split and missed drop (V8 Haiku draft); did not fix
+  R004's false slip or its 15-frame delayed separation. No new false positives in
+  seven audits.
+
+## Recommendation
+
+Keep addendum rules 1-2 (schema coupling, review calibration). Treat rules 3-6 as
+dev-fit until they are re-evaluated on new episodes. The most promising
+structural change is annotate then audit: V8 (+ rules 1-2) followed by a Sonnet
+audit, with Haiku-draft + Sonnet-audit as a cheaper variant. Before any paper
+claim: human review of R001-R010, repeated runs to estimate variance, and an
+evaluation on the untouched R011-R012.

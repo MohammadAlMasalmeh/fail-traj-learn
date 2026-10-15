@@ -1,0 +1,56 @@
+
+## Additional reporting rules (Claude addendum v2)
+
+These rules clarify the protocol above; they do not change any label definition.
+
+1. review_required and uncertainty are coupled exactly. If review_required=false,
+   uncertainty must be the empty string "" (put minor caveats in observed_result or
+   omit them). If review_required=true, uncertainty must be nonempty.
+
+2. Set review_required=true only when the uncertainty could change a label a reviewer
+   would care about: the failure boolean, a failure category, the action or its
+   referent, the identity match, or a boundary by more than one sampled frame.
+   Routine limits of sparse sampling (exact onset between two consecutive samples,
+   settling not shown after the last frame) do not by themselves require review
+   when the labels are otherwise supported. Do not mark every segment for review.
+
+3. Referent continuity. An object that stays continuously between the gripper
+   fingers from acquisition through release is ONE referent for the whole episode.
+   When its label first becomes legible later (for example in the wrist view after
+   it is dropped), that later evidence names the same tracked referent; it is not
+   a second object. Assign the requested-object identifier to it if the legible
+   evidence supports the requested object, and do not label earlier segments
+   sequencing_semantic merely because the identity was not legible at the time.
+   Conversely, use a different referent only when both objects are visible as
+   distinct physical instances or the tracked object visibly changes.
+   This rule concerns naming only. Once the tracked object is supported as a
+   different object from the requested one, label sequencing_semantic from the
+   first supported engagement exactly as the protocol above requires; identity
+   continuity never removes a supported wrong-object failure.
+
+4. Loss of control before release. While the gripper is still commanded closed, an
+   object that separates from the gripper (falls, slips, drops into or beside the
+   destination) is a loss of control: failure=true with category grasp, localized
+   to the first supplied observation showing the separation. Keep the continuing
+   operation as the action (usually transport); do not relabel the interval as idle.
+   A later commanded opening on an already empty gripper is still the action
+   release; state that no object separates because none is held.
+
+5. Placement outcome. After any release or drop near the destination, check the
+   following images for where the object comes to rest. An object that ends outside
+   the destination (on the floor or table beside it) is a failed placement:
+   failure=true with category manipulation (or grasp if control was lost before
+   release), localized to the first observation showing it outside.
+
+6. Attachment test in the wrist view. The wrist camera moves with the gripper.
+   An object that keeps the same image position, size, and orientation across
+   wrist frames while the background or destination visibly shifts or rescales is
+   moving with the gripper: it is still attached, whatever the finger aperture or
+   gripper command says. Apply this test after every commanded opening. If the
+   object stays attached after the fingers open, label delayed separation (release
+   with failure=true, category manipulation) from the first supplied observation
+   in which the opened gripper still carries it, and end it at the first
+   observation showing the object separated (its image position or size changes
+   relative to the gripper, or it is seen resting in or beside the destination).
+   Open fingers and an object below the gripper are not by themselves evidence of
+   separation.

@@ -133,17 +133,20 @@ def reference_metrics(anns, ref):
         r = ref.get(ep)
         if r is None:
             continue
-        pred, gold = failure_cats(ann), set(r.get("failure_categories", []))
+        cats = r.get("failure_categories", [])
+        pred, gold = failure_cats(ann), set(cats or [])
         inter = len(pred & gold)
         ep_fail = any(s["failure"] for s in ann["segments"])
         row = {
             "key": key,
             "episode_id": ann["episode_id"],
             "outcome_correct": (r["outcome"] == "failure") == ep_fail,
-            "match_status_correct": ann["identity_check"]["match_status"] == r["match_status"],
+            # A null reference field means "not verified"; it is left unscored.
+            "match_status_correct": None if r.get("match_status") is None
+            else ann["identity_check"]["match_status"] == r["match_status"],
             # Empty-set convention: nothing to find and nothing predicted scores 1.0.
-            "category_recall": inter / len(gold) if gold else float(not pred),
-            "category_precision": inter / len(pred) if pred else float(not gold),
+            "category_recall": None if cats is None else (inter / len(gold) if gold else float(not pred)),
+            "category_precision": None if cats is None else (inter / len(pred) if pred else float(not gold)),
             "failure_frame_iou": None,
         }
         if "failure_frames" in r:

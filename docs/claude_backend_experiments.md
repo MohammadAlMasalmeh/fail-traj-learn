@@ -164,3 +164,23 @@ drop; R008 toppling collision).
   consistent with the frame strip). No false positives in three Opus audits.
 - Recommendation update: draft with Sonnet or Haiku (+ rules 1-2), audit with
   Opus. Per-call cost is similar (~90-110k subagent tokens).
+
+## More approaches (day 2)
+
+- **Telemetry ablation** (`--telemetry cmd|eef|none`). Removing finger aperture
+  removed R004's telemetry-induced false slip for Sonnet and Opus, but broke R005
+  (regrasp misses read as "still attached") and R007; on 12 checks Sonnet full 9,
+  command-only 7, arm-only 6. Aperture is right in some episodes and misleading in
+  others; keep full telemetry.
+- **2x upscaled tiles** (`--scale 2`): 8/12 vs 9/12 at native size, ~40% more
+  tokens. Not adopted.
+- **Majority vote** (`claude_ensemble.py`, Haiku+Sonnet+Opus V8): 9/13 vs 10/13
+  for the best single model; it outvotes rare correct detections. Not adopted.
+- **Haiku draft -> Opus audit**: 12/13 verified events (Haiku 7, Sonnet 9, Opus 10
+  single pass). First configuration to label R004's 15-frame delayed separation
+  under V8. No false positives on the clean R002/R010 controls (it also fixed
+  Haiku's unresolved identity on R002). Remaining miss: R004's 135-145 "slip",
+  the most ambiguous check. ~215k subagent tokens per episode.
+
+Current recommendation: Haiku draft (V8 + rules 1-2) followed by an Opus audit
+using `references/claude/auditor_brief.txt`.

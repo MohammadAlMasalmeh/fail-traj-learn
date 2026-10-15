@@ -103,7 +103,19 @@ def request_text(ep, prompt_name, sheets, digest=False):
     return "\n".join(lines)
 
 
-def prepare(out, source, ids, prompt, stride, addendum=None, digest=False):
+def event_frames(telemetry, n, offsets=range(-4, 11, 2), tail=12):
+    """Extra frames around gripper command changes and over the recording's end.
+
+    Release, slip, and placement outcomes often resolve within a few frames of a
+    command change or in the last frames, which a fixed stride samples once or twice.
+    """
+    cmd = {r["frame"]: r["gripper_command"] for r in telemetry}
+    changes = [f for f in sorted(cmd) if f - 1 in cmd and cmd[f] != cmd[f - 1]]
+    extra = {f + k for f in changes for k in offsets} | set(range(max(0, n - tail), n, 2))
+    return {f for f in extra if 0 <= f < n}
+
+
+def prepare(out, source, ids, prompt, stride, addendum=None, digest=False, events=False):
     import numpy as np
     out, source = Path(out).resolve(), Path(source).resolve()
     if out.exists():
@@ -117,7 +129,10 @@ def prepare(out, source, ids, prompt, stride, addendum=None, digest=False):
     for eid in ids:
         observed = common.load(source / eid / "observable.json")
         n, fps = observed["n_frames"], observed["fps"]
-        frames = sorted(set(range(0, n, stride)) | {n - 1})
+        frames = set(range(0, n, stride)) | {n - 1}
+        if events:
+            frames |= event_frames(observed["telemetry"], n)
+        frames = sorted(frames)
         rows = {r["frame"]: r for r in observed["telemetry"]}
         ep = dict(id=eid, task=observed["task"], n_frames=n, fps=fps, sampled_frames=frames,
                   telemetry=[dict(frame=f, seconds=f / fps, **{k: rows[f][k] for k in (
@@ -140,7 +155,8 @@ def prepare(out, source, ids, prompt, stride, addendum=None, digest=False):
     common.write_json(out / "manifest.json", dict(
         name="claude_atomic", prepared_utc=datetime.now(timezone.utc).isoformat(),
         settings=dict(sample_stride=stride, base_prompt=Path(prompt).name,
-                      addendum=Path(addendum).name if addendum else None, gripper_digest=digest, per_sheet=PER_SHEET, per_row=PER_ROW,
+                      addendum=Path(addendum).name if addendum else None, gripper_digest=digest,
+                      event_frames=events, per_sheet=PER_SHEET, per_row=PER_ROW,
                       prompt_sha256=common.digest(out / "prompt.txt")),
         episodes=[e["id"] for e in episodes]))
     print(json.dumps({e["id"]: len(e["sampled_frames"]) for e in episodes}))
@@ -188,11 +204,12 @@ if __name__ == "__main__":
     p.add_argument("--stride", type=int, default=5)
     p.add_argument("--addendum", type=Path)
     p.add_argument("--gripper-digest", action="store_true")
+    p.add_argument("--event-frames", action="store_true")
     p.add_argument("--episode")
     p.add_argument("--model")
     a = p.parse_args()
     if a.command == "prepare":
-        prepare(a.out, a.source, a.episodes, a.prompt, a.stride, a.addendum, a.gripper_digest)
+        prepare(a.out, a.source, a.episodes, a.prompt, a.stride, a.addendum, a.gripper_digest, a.event_frames)
     elif a.command == "validate":
         raise SystemExit(0 if validate(a.out, a.episode, a.model) else 1)
     else:

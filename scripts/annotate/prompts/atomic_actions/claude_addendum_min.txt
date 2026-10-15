@@ -1,0 +1,15 @@
+
+## Additional reporting rules (Claude addendum min (rules 1-2 of v1))
+
+These rules clarify the protocol above; they do not change any label definition.
+
+1. review_required and uncertainty are coupled exactly. If review_required=false,
+   uncertainty must be the empty string "" (put minor caveats in observed_result or
+   omit them). If review_required=true, uncertainty must be nonempty.
+
+2. Set review_required=true only when the uncertainty could change a label a reviewer
+   would care about: the failure boolean, a failure category, the action or its
+   referent, the identity match, or a boundary by more than one sampled frame.
+   Routine limits of sparse sampling (exact onset between two consecutive samples,
+   settling not shown after the last frame) do not by themselves require review
+   when the labels are otherwise supported. Do not mark every segment for review.

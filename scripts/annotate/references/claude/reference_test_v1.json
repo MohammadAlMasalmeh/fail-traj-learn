@@ -1,0 +1,6 @@
+{
+ "R011": {"outcome": null, "match_status": null, "failure_categories": null,
+          "note": "Dark can grasped (~90) and carried over the basket (~200-230); held unreleased above it until the recording ends. Whether holding at the end is a supported failure under V8 is ambiguous; only identity/outcome-free checks apply."},
+ "R012": {"outcome": "failure", "match_status": "supported_match", "failure_categories": ["grasp"],
+          "note": "Cream cheese box (legible) grasped and rotated, lost, repeatedly regrasped; never transported to the basket."}
+}

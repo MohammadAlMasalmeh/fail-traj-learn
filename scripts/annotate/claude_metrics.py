@@ -140,7 +140,7 @@ def reference_metrics(anns, ref):
         row = {
             "key": key,
             "episode_id": ann["episode_id"],
-            "outcome_correct": (r["outcome"] == "failure") == ep_fail,
+            "outcome_correct": None if r.get("outcome") is None else (r["outcome"] == "failure") == ep_fail,
             # A null reference field means "not verified"; it is left unscored.
             "match_status_correct": None if r.get("match_status") is None
             else ann["identity_check"]["match_status"] == r["match_status"],

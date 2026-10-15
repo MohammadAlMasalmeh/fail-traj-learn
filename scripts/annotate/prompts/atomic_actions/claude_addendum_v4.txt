@@ -1,0 +1,61 @@
+
+## Additional reporting rules (Claude addendum v4)
+
+These rules clarify the protocol above; they do not change any label definition.
+
+1. review_required and uncertainty are coupled exactly. If review_required=false,
+   uncertainty must be the empty string "" (put minor caveats in observed_result or
+   omit them). If review_required=true, uncertainty must be nonempty.
+
+2. Set review_required=true only when the uncertainty could change a label a reviewer
+   would care about: the failure boolean, a failure category, the action or its
+   referent, the identity match, or a boundary by more than one sampled frame.
+   Routine limits of sparse sampling (exact onset between two consecutive samples,
+   settling not shown after the last frame) do not by themselves require review
+   when the labels are otherwise supported. Do not mark every segment for review.
+
+3. Referent continuity. An object that stays continuously between the gripper
+   fingers from acquisition through release is ONE referent for the whole episode.
+   When its label first becomes legible later (for example in the wrist view after
+   it is dropped), that later evidence names the same tracked referent; it is not
+   a second object. Assign the requested-object identifier to it if the legible
+   evidence supports the requested object, and do not label earlier segments
+   sequencing_semantic merely because the identity was not legible at the time.
+   Conversely, use a different referent only when both objects are visible as
+   distinct physical instances or the tracked object visibly changes.
+   This rule concerns naming only. Once the tracked object is supported as a
+   different object from the requested one, label sequencing_semantic from the
+   first supported engagement exactly as the protocol above requires; identity
+   continuity never removes a supported wrong-object failure.
+
+4. Loss of control requires visual separation. Finger aperture is not evidence of
+   possession: an object can stay attached to the gripper outside the finger pads
+   while the fingers read fully closed, and it can stay attached after they open.
+   Label loss of control (failure=true, category grasp, continuing action kept,
+   usually transport) only when the images show the object no longer moving with
+   the gripper: falling, resting on a surface while the gripper moves, or absent
+   from below the gripper in the agent view. Check the agent view for an object
+   hanging below or beside the gripper before concluding it was lost. A later
+   commanded opening with no object attached is still the action release.
+
+5. Placement outcome. After any release or drop near the destination, check the
+   following images for where the object comes to rest. An object that ends outside
+   the destination (on the floor or table beside it) is a failed placement:
+   failure=true with category manipulation (or grasp if control was lost before
+   release), localized to the first observation showing it outside.
+
+6. Attachment test after opening. A fixed position in the wrist image is NOT enough:
+   the robot also keeps an object centered in the wrist camera while it approaches
+   that object on a surface. Judge attachment from these cues together:
+   - the agent view shows the object off any surface, directly below or beside the
+     opened gripper, and moving with it; and
+   - in the wrist view the object keeps the same image size while the gripper's
+     height (eef z) changes by several centimetres. An object resting on a surface
+     grows as the gripper descends toward it and shrinks as it rises.
+   Delayed separation is failure only when these cues show attachment across at
+   least two consecutive supplied observations after the fingers have fully
+   opened. Start it at the first of those observations and end it at the first
+   observation showing separation. An object seen lying on the floor, table, or
+   inside the destination is not attached. A single post-opening frame with the
+   object still near the fingers is release in progress: keep failure=false and,
+   if the recording ends there, report separation as not verified.

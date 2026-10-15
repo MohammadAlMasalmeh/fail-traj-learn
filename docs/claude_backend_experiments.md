@@ -134,3 +134,16 @@ structural change is annotate then audit: V8 (+ rules 1-2) followed by a Sonnet
 audit, with Haiku-draft + Sonnet-audit as a cheaper variant. Before any paper
 claim: human review of R001-R010, repeated runs to estimate variance, and an
 evaluation on the untouched R011-R012.
+
+## Final test (R011-R012, untouched until the end)
+
+References: `scripts/annotate/references/claude/reference_test_v1.json` (R011
+outcome/identity unscored: the can is held unreleased at the end, which V8 does
+not clearly classify). Conditions: V8 Sonnet; V8 + rules 1-2 only
+(`claude_addendum_min.txt`) with Sonnet and Haiku; Sonnet audit of the min Sonnet
+drafts. All conditions produced the same failure segments and matched the R012
+reference. Differences were in calibration only: first-pass schema failures V8
+2/2, min 1/4, audit 0/2; review-flag fraction V8 Sonnet 0.38-0.50, min Sonnet
+0.00. The auditor made no changes, as expected for drafts without detectable
+errors. This supports adopting rules 1-2 and using the audit as an error-catching
+pass; it does not test the audit's error-fixing on new data (no errors occurred).

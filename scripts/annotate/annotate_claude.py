@@ -19,7 +19,6 @@ import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
-import shutil
 
 import annotation_runtime as common
 import annotate_trajectories as base
@@ -53,7 +52,26 @@ def draw_sheet(arrays, frames, path):
     sheet.save(path, quality=92)
 
 
-def request_text(ep, prompt_name, sheets):
+def gripper_digest(ep, empty=0.012, open_=0.07):
+    """Summarize model-visible gripper telemetry into runs of command/aperture state."""
+    def state(r):
+        ap = abs(r["finger_qpos_m"][0]) + abs(r["finger_qpos_m"][1])
+        if ap >= open_:
+            return "fingers open"
+        if ap < empty:
+            return "fingers fully closed (nothing between them)"
+        return "fingers stopped partly open"
+    runs = []
+    for r in ep["telemetry"]:
+        key = (r["gripper_command"], state(r))
+        if runs and runs[-1][0] == key:
+            runs[-1][2] = r["frame"]
+        else:
+            runs.append([key, r["frame"], r["frame"]])
+    return [f"frames {a}-{b}: command {cmd}; {st}" for (cmd, st), a, b in runs]
+
+
+def request_text(ep, prompt_name, sheets, digest=False):
     lines = [
         f"# Annotation request: episode {ep['id']}",
         "",
@@ -75,16 +93,26 @@ def request_text(ep, prompt_name, sheets):
     lines += ["", "## Telemetry (one row per sampled frame; commands at t follow observation t)", "```"]
     lines += [json.dumps(row) for row in ep["telemetry"]]
     lines += ["```", ""]
+    if digest:
+        lines += ["## Gripper telemetry digest (derived from the rows above; a cue, not proof)",
+                  "Aperture = sum of the two finger positions. A run where the gripper is commanded",
+                  "closed but the fingers stop partly open is consistent with an object between them;",
+                  "fully closed fingers under a close command are consistent with an empty gripper.",
+                  "Confirm every physical claim in the images; telemetry alone never establishes contact.", ""]
+        lines += ["- " + line for line in gripper_digest(ep)] + [""]
     return "\n".join(lines)
 
 
-def prepare(out, source, ids, prompt, stride):
+def prepare(out, source, ids, prompt, stride, addendum=None, digest=False):
     import numpy as np
     out, source = Path(out).resolve(), Path(source).resolve()
     if out.exists():
         raise ValueError("Fresh output directory required; never overwrite a run")
     out.mkdir(parents=True)
-    shutil.copyfile(prompt, out / "prompt.txt")
+    text = Path(prompt).read_text(encoding="utf-8")
+    if addendum:
+        text += Path(addendum).read_text(encoding="utf-8")
+    (out / "prompt.txt").write_text(text, encoding="utf-8")
     episodes = []
     for eid in ids:
         observed = common.load(source / eid / "observable.json")
@@ -106,12 +134,13 @@ def prepare(out, source, ids, prompt, stride):
                 draw_sheet(arrays, chunk, path)
                 sheets.append((path.as_posix(), chunk))
         (folder / "request.md").write_text(
-            request_text(ep, (out / "prompt.txt").as_posix(), sheets), encoding="utf-8")
+            request_text(ep, (out / "prompt.txt").as_posix(), sheets, digest), encoding="utf-8")
         common.write_json(folder / "input.json", ep)
         episodes.append(ep)
     common.write_json(out / "manifest.json", dict(
         name="claude_atomic", prepared_utc=datetime.now(timezone.utc).isoformat(),
-        settings=dict(sample_stride=stride, per_sheet=PER_SHEET, per_row=PER_ROW,
+        settings=dict(sample_stride=stride, base_prompt=Path(prompt).name,
+                      addendum=Path(addendum).name if addendum else None, gripper_digest=digest, per_sheet=PER_SHEET, per_row=PER_ROW,
                       prompt_sha256=common.digest(out / "prompt.txt")),
         episodes=[e["id"] for e in episodes]))
     print(json.dumps({e["id"]: len(e["sampled_frames"]) for e in episodes}))
@@ -157,11 +186,13 @@ if __name__ == "__main__":
     p.add_argument("--episodes", nargs="+", default=["R001", "R002", "R003", "R004"])
     p.add_argument("--prompt", type=Path, default=ROOT / "scripts/annotate/prompts/atomic_actions/annotation.txt")
     p.add_argument("--stride", type=int, default=5)
+    p.add_argument("--addendum", type=Path)
+    p.add_argument("--gripper-digest", action="store_true")
     p.add_argument("--episode")
     p.add_argument("--model")
     a = p.parse_args()
     if a.command == "prepare":
-        prepare(a.out, a.source, a.episodes, a.prompt, a.stride)
+        prepare(a.out, a.source, a.episodes, a.prompt, a.stride, a.addendum, a.gripper_digest)
     elif a.command == "validate":
         raise SystemExit(0 if validate(a.out, a.episode, a.model) else 1)
     else:

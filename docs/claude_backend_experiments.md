@@ -184,3 +184,11 @@ drop; R008 toppling collision).
 
 Current recommendation: Haiku draft (V8 + rules 1-2) followed by an Opus audit
 using `references/claude/auditor_brief.txt`.
+- **Auditor choice.** On the same Haiku drafts: Sonnet audit 10/13, Opus audit
+  12/13. Sonnet fixes identity/placement/collision errors equally well; Opus is
+  needed for the hardest attachment cases (R001 135-140, R004).
+- **Generalization (R003, R006, R009, Opus audits).** R003 unchanged; R009 first
+  grasp corrected to lift-then-drop (matches the reference) and its final-frame
+  placement labeled failure (reference treats it as review-only); R006 gained a
+  one-frame provisional failed grasp at 279 that the frames do not establish
+  (fingers still closing) - the first audit over-call in 14 Opus audits.

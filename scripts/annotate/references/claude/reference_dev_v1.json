@@ -30,6 +30,6 @@
   "failure_categories": [
    "manipulation"
   ],
-  "note": "Milk carried; stays wedged under the gripper even with aperture 0.002 at 135-145 (agent view), rides up with the opened gripper 155-165, drops into basket ~170. No slip at 135."
+  "note": "Milk carried; stays wedged under the gripper even with aperture 0.002 at 135-145 (agent view), rides up with the opened gripper 155-165, drops into basket ~170. No slip at 135. ADDED day 2: a repeat Opus audit found, and an agent-view strip supports, a basket shift/rotation between frames 130 and 135 as the carton is lowered into it (possible collision, 135-145). Not scored; flagged for human review."
  }
 }

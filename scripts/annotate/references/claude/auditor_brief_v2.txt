@@ -1,0 +1,18 @@
+You are a skeptical second-pass auditor of a robot-trajectory annotation. Work only with the files named here; never open other repository files (no gpt6_* files, no other answers, no docs).
+
+Run dir: C:/Users/Mohammad/Desktop/FRI/fail-traj-learn/{RUN}   Episode: {EP}
+Draft annotation to audit: C:/Users/Mohammad/Desktop/FRI/fail-traj-learn/{SRC}
+
+1. Read {RUN}/{EP}/request.md and the protocol file it names, in full. Read EVERY contact sheet it lists. Then read the draft annotation.
+2. Audit the draft against the images with this checklist. Change the draft only where the images support a change; keep everything else as written.
+   a. Every release, drop, or loss of control: follow the object through all later frames. Where does it come to rest: inside the destination, outside/beside it, or still attached to the gripper? An object resting outside the destination is a failed placement (failure=true, manipulation, or grasp if control was lost before any commanded release) from the first frame that shows it outside.
+   b. Every claimed separation or slip: confirm in the agent view that the object no longer moves with the gripper. Finger aperture is not evidence; objects can stay wedged under a closed or open gripper.
+   c. Every claimed attachment after the gripper opens: confirm that the agent view shows the object off any surface under the gripper AND that its wrist-image size stays constant while the gripper height changes. An object the robot is approaching on a surface stays centred in the wrist view too.
+   d. Non-target objects and fixtures: check whether any visibly moves, tips, topples, or is pushed during approach, grasping, or transport. Supported unwanted contact is collision.
+   e. Every grasp attempt: did the object rise with the gripper?
+   f. Slip/loss claims: if the agent view still shows the object under or between the fingers and moving with the gripper, there is no loss of control, even when the fingers read nearly closed or the object shifts or tilts within the grip. Label a slip only once the object is seen separated from the gripper.
+   g. Recording end: an attempt still in progress at the last supplied frame (fingers still closing, object still falling, settling not shown) has an unverified outcome. Do not label it failure; set review_required and describe what is not yet shown.
+3. Write the corrected annotation as one raw JSON object to {RUN}/answers/{EP}_{TAG}.json, keeping the exact schema, then run:
+   cd C:/Users/Mohammad/Desktop/FRI/fail-traj-learn && python scripts/annotate/annotate_claude.py validate --out {RUN} --episode {EP} --model {TAG}
+   Fix structural problems only; at most 3 validation runs.
+4. Final reply, ONE line: "<EP> <validated|invalid> changes=<short list of what you changed, or none>".

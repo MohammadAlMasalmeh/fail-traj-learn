@@ -1,0 +1,33 @@
+{
+ "R007": {
+  "outcome": "failure",
+  "match_status": "supported_match",
+  "failure_categories": null,
+  "note": "Alphabet soup can tips/rolls, is grasped tilted, held near its start until the end; never transported. Categories not verified."
+ },
+ "R008": {
+  "outcome": "failure",
+  "match_status": "supported_match",
+  "failure_categories": [
+   "grasp",
+   "collision"
+  ],
+  "note": "Ketchup upright at start; approach topples it onto its side ~100-130 (collision); repeated failed grasps; never transported. Corrected after strip check (v1 said it started lying down)."
+ },
+ "R009": {
+  "outcome": "failure",
+  "match_status": null,
+  "failure_categories": [
+   "grasp",
+   "manipulation"
+  ],
+  "note": "First grasp lost ~65, second miss ~120, third grasp carries it to the basket; released at 270 and lands on the floor outside the basket (visible 276-279)."
+ },
+ "R010": {
+  "outcome": "success",
+  "match_status": "supported_match",
+  "failure_categories": [],
+  "failure_frames": [],
+  "note": "Cream cheese grasped, carried, placed in basket; episode ends at 121."
+ }
+}

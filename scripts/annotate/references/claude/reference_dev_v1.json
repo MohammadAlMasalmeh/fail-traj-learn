@@ -1,0 +1,35 @@
+{
+ "R001": {
+  "outcome": "failure",
+  "match_status": "supported_mismatch",
+  "failure_categories": [
+   "sequencing_semantic",
+   "manipulation"
+  ],
+  "note": "Orange juice carried instead of tomato sauce; carton stays attached to the open gripper (fixed in wrist view) ~160-270, drops into basket ~275. No slip at 135-145: fingers read closed but carton still attached."
+ },
+ "R002": {
+  "outcome": "success",
+  "match_status": "supported_match",
+  "failure_categories": [],
+  "failure_frames": [],
+  "note": "Butter grasped, carried, released into basket."
+ },
+ "R005": {
+  "outcome": "failure",
+  "match_status": "supported_match",
+  "failure_categories": [
+   "manipulation",
+   "grasp"
+  ],
+  "note": "Salad dressing carried, released, lands outside the basket (~155-160); two failed regrasps (~210, ~270)."
+ },
+ "R004": {
+  "outcome": "failure",
+  "match_status": "supported_match",
+  "failure_categories": [
+   "manipulation"
+  ],
+  "note": "Milk carried; stays wedged under the gripper even with aperture 0.002 at 135-145 (agent view), rides up with the opened gripper 155-165, drops into basket ~170. No slip at 135."
+ }
+}

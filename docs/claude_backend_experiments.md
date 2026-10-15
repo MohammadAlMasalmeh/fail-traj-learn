@@ -33,3 +33,75 @@ None of these is accuracy. Agreement is a diagnostic only.
 ## Log
 
 Entries are appended below as experiments complete.
+
+### Conditions
+
+| ID | Run dir | Prompt | Sampling | Models | Episodes |
+|---|---|---|---|---|---|
+| E0 | `claude_v8_baseline` | V8 | stride 5 + last | Haiku, Sonnet | R001-R006 |
+| E1 | `claude_add1` | V8 + addendum v1 | stride 5 | Haiku, Sonnet | R001-R006 |
+| E2 | `claude_add1_digest` | V8 + v1 + gripper digest | stride 5 | Haiku | R001-R006 |
+| E3 | `claude_add2` | V8 + v2 | stride 5 | Haiku, Sonnet | R001-R006 |
+| E4 | `claude_add3`, `claude_add3_rep` | V8 + v3 | stride 5 | Haiku, Sonnet (x2) | R001-R006 |
+| E5 | `claude_add4` | V8 + v4 (frozen) | stride 5 | Sonnet | R001-R006 |
+| HO | `heldout_v8`, `heldout_v4` | V8 / V8 + v4 | stride 5 | Haiku, Sonnet | R007-R010 |
+| EV | `v8_events` | V8 | stride 5 + event frames | Sonnet | R001, R004, R005, R009 |
+| EV4 | `v4_events` | V8 + v4 | stride 5 + event frames | Sonnet | R001, R004, R005, R008, R009 |
+
+R001-R006 are the development set used to write the addenda. R007-R010 are held
+out: their references were labeled before any model output on them was read,
+and v4 was frozen before they were annotated.
+
+### References
+
+`scripts/annotate/references/claude/reference_dev_v1.json` (R001, R002, R004, R005) and
+`scripts/annotate/references/claude/reference_heldout_v2.json` (R007-R010) are one reviewer's visual
+judgments (Claude Opus reading the camera arrays as overviews and frame strips
+with telemetry). They are not human ground truth. Two held-out entries were
+corrected after targeted strip checks (R008 collision, R009 landing outside the
+basket); the corrections are recorded in the files' notes.
+
+## Findings: where the pipeline goes wrong
+
+- **F1 Review/uncertainty coupling.** 3/4 first-pass schema failures in E0 were
+  `review_required=false` with nonempty `uncertainty`. Addendum rule 1 removed
+  them (E1+: 11/12 or better; held-out v4 0/8 vs V8 1/8 first-pass failures).
+- **F2 Review-flag inflation.** Haiku flagged 75-100% of segments. Addendum rule
+  2 cut flags to 0-67% (dev) and 0-19% for Sonnet on held-out vs 25-63% under V8.
+- **F3 Referent fragmentation.** Haiku split one carried object into two
+  referents once its label became legible, inventing a wrong-object failure over
+  55% of R005. Rule 3 reduced it; its first wording also suppressed true
+  semantic failure (R001 E1 Haiku), fixed in v2.
+- **F7 Attachment after opening.** In R001 (and briefly R004) the object stays
+  attached to the opened gripper. V8 gives no positive attachment test, and every
+  E0 annotation reported separation. Fixed for Sonnet by the attachment rule (v2+)
+  and, independently, by event-aware sampling with the unchanged V8 prompt (EV).
+- **F8 Telemetry-induced false slips.** Fingers read fully closed (0.002-0.006 m)
+  while the object stays wedged under the gripper (agent view). Models labeled a
+  slip at 135-145 in R001/R004. My own addendum v1 rule 4 and the gripper digest
+  reinforced this; v3 requires visual separation, which removed it for Sonnet.
+- **F8b Over-correction.** The first attachment rule (v2/v3) fired on an object
+  the robot was servoing onto (kept centered in the wrist camera), producing a
+  false "still attached" over R005's regrasp attempts. v4 requires agent-view
+  support and constant wrist-image size while gripper height changes.
+- **F9 Short end-of-action events are under-sampled.** Delayed separation (R004,
+  15 frames) and the R009 landing outside the basket (last 10 frames) get 1-2
+  looks at stride 5. Event sampling fixed R001 with V8 but not R004 or R009.
+- **F6 Protocol limit.** One `match_status` per episode cannot record a correct
+  object followed by a wrong one (R003).
+
+## Results summary
+
+Dev-set event checks (`claude_events.py`, 11 checks): V8 Haiku 6, V8 Sonnet 8,
+v4 Sonnet 10, v3 Sonnet 8 and 7 (two runs), v2 Haiku 10, EV (V8) Sonnet 7/10.
+
+Held-out (R007-R010), category recall / precision:
+V8 Sonnet 0.83/1.00, v4 Sonnet 0.67/1.00, V8 Haiku 0.67/0.67, v4 Haiku 0.67/1.00.
+Outcome and identity were correct for every condition.
+
+Interpretation: addendum rules 1-2 (schema coupling and review calibration) are a
+robust improvement. The event-detection rules (3-6) improved the development set
+but did not improve held-out recall (v4 Sonnet missed the R008 collision that V8
+found), so their dev gains are at least partly fit to R001-R006. Run-to-run
+variance is large: identical prompt and model detected R004's delayed separation
+in one of two runs. Single-run differences of one event are not evidence.

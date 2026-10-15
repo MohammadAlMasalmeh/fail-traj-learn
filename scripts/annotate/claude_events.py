@@ -35,7 +35,7 @@ CHECKS = [
 def main(runs):
     rows = []
     for run in runs:
-        for tag in ("haiku", "sonnet", "opus"):
+        for tag in ("haiku", "sonnet", "opus", "ens"):
             res, n = [], 0
             for ep, desc, expected, pred in CHECKS:
                 f = Path(run) / "answers" / f"{ep}_{tag}.json"

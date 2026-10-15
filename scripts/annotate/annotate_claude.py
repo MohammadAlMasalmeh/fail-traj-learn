@@ -26,6 +26,7 @@ import annotate_trajectories as base
 ROOT = common.ROOT
 PER_SHEET = 8          # sampled frames per contact sheet
 PER_ROW = 2            # frame pairs (agent|wrist) per sheet row
+SCALE = 1              # integer upscale of each 256 px tile (Lanczos); adds no pixel information
 HEADER = 22            # label strip height in pixels
 
 
@@ -35,7 +36,7 @@ def sheet_layout(frames):
 
 def draw_sheet(arrays, frames, path):
     from PIL import Image, ImageDraw, ImageFont
-    h, w = arrays["agent"].shape[1:3]
+    h, w = (d * SCALE for d in arrays["agent"].shape[1:3])
     rows = (len(frames) + PER_ROW - 1) // PER_ROW
     sheet = Image.new("RGB", (PER_ROW * 2 * w + (PER_ROW - 1) * 8, rows * (h + HEADER)), "white")
     draw = ImageDraw.Draw(sheet)
@@ -47,7 +48,10 @@ def draw_sheet(arrays, frames, path):
         r, c = divmod(i, PER_ROW)
         x0, y0 = c * (2 * w + 8), r * (h + HEADER)
         for j, camera in enumerate(("agent", "wrist")):
-            sheet.paste(Image.fromarray(arrays[camera][f]), (x0 + j * w, y0 + HEADER))
+            tile = Image.fromarray(arrays[camera][f])
+            if SCALE != 1:
+                tile = tile.resize((w, h), Image.LANCZOS)
+            sheet.paste(tile, (x0 + j * w, y0 + HEADER))
             draw.text((x0 + j * w + 4, y0 + 2), f"frame {f} | {camera}", fill="black", font=font)
     sheet.save(path, quality=92)
 
@@ -71,7 +75,11 @@ def gripper_digest(ep, empty=0.012, open_=0.07):
     return [f"frames {a}-{b}: command {cmd}; {st}" for (cmd, st), a, b in runs]
 
 
-def request_text(ep, prompt_name, sheets, digest=False):
+TELEMETRY_KEYS = {"full": ("eef_xyz_m", "finger_qpos_m", "gripper_command"), "cmd": ("eef_xyz_m", "gripper_command"),
+                  "eef": ("eef_xyz_m",), "none": ()}
+
+
+def request_text(ep, prompt_name, sheets, digest=False, telemetry="full"):
     lines = [
         f"# Annotation request: episode {ep['id']}",
         "",
@@ -90,9 +98,13 @@ def request_text(ep, prompt_name, sheets, digest=False):
     ]
     for path, frames in sheets:
         lines.append(f"- `{path}`: frames {frames}")
-    lines += ["", "## Telemetry (one row per sampled frame; commands at t follow observation t)", "```"]
-    lines += [json.dumps(row) for row in ep["telemetry"]]
-    lines += ["```", ""]
+    keys = TELEMETRY_KEYS[telemetry]
+    if keys:
+        lines += ["", "## Telemetry (one row per sampled frame; commands at t follow observation t)", "```"]
+        lines += [json.dumps({k: row[k] for k in ("frame", "seconds", *keys)}) for row in ep["telemetry"]]
+        lines += ["```", ""]
+    else:
+        lines += ["", "No robot telemetry is supplied for this request; judge from the images only.", ""]
     if digest:
         lines += ["## Gripper telemetry digest (derived from the rows above; a cue, not proof)",
                   "Aperture = sum of the two finger positions. A run where the gripper is commanded",
@@ -115,7 +127,7 @@ def event_frames(telemetry, n, offsets=range(-4, 11, 2), tail=12):
     return {f for f in extra if 0 <= f < n}
 
 
-def prepare(out, source, ids, prompt, stride, addendum=None, digest=False, events=False):
+def prepare(out, source, ids, prompt, stride, addendum=None, digest=False, events=False, telemetry="full"):
     import numpy as np
     out, source = Path(out).resolve(), Path(source).resolve()
     if out.exists():
@@ -149,14 +161,14 @@ def prepare(out, source, ids, prompt, stride, addendum=None, digest=False, event
                 draw_sheet(arrays, chunk, path)
                 sheets.append((path.as_posix(), chunk))
         (folder / "request.md").write_text(
-            request_text(ep, (out / "prompt.txt").as_posix(), sheets, digest), encoding="utf-8")
+            request_text(ep, (out / "prompt.txt").as_posix(), sheets, digest, telemetry), encoding="utf-8")
         common.write_json(folder / "input.json", ep)
         episodes.append(ep)
     common.write_json(out / "manifest.json", dict(
         name="claude_atomic", prepared_utc=datetime.now(timezone.utc).isoformat(),
         settings=dict(sample_stride=stride, base_prompt=Path(prompt).name,
                       addendum=Path(addendum).name if addendum else None, gripper_digest=digest,
-                      event_frames=events, per_sheet=PER_SHEET, per_row=PER_ROW,
+                      event_frames=events, telemetry=telemetry, scale=SCALE, per_sheet=PER_SHEET, per_row=PER_ROW,
                       prompt_sha256=common.digest(out / "prompt.txt")),
         episodes=[e["id"] for e in episodes]))
     print(json.dumps({e["id"]: len(e["sampled_frames"]) for e in episodes}))
@@ -205,11 +217,16 @@ if __name__ == "__main__":
     p.add_argument("--addendum", type=Path)
     p.add_argument("--gripper-digest", action="store_true")
     p.add_argument("--event-frames", action="store_true")
+    p.add_argument("--scale", type=int, default=1, help="upscale tiles; 2 uses 2 frames (one pair per row) per sheet")
+    p.add_argument("--telemetry", choices=tuple(TELEMETRY_KEYS), default="full",
+                   help="eef drops finger aperture and gripper command; none drops all telemetry")
     p.add_argument("--episode")
     p.add_argument("--model")
     a = p.parse_args()
+    if a.scale != 1:
+        SCALE, PER_ROW, PER_SHEET = a.scale, 1, 2  # keeps each sheet under the 1568 px long-edge limit
     if a.command == "prepare":
-        prepare(a.out, a.source, a.episodes, a.prompt, a.stride, a.addendum, a.gripper_digest, a.event_frames)
+        prepare(a.out, a.source, a.episodes, a.prompt, a.stride, a.addendum, a.gripper_digest, a.event_frames, a.telemetry)
     elif a.command == "validate":
         raise SystemExit(0 if validate(a.out, a.episode, a.model) else 1)
     else:

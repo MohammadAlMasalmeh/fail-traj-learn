@@ -1,0 +1,152 @@
+{
+  "kind": "random_human_review_sample",
+  "population_size": 500,
+  "sample_size": 20,
+  "seed": "7845393249386976415",
+  "sampling": "random.Random(seed).sample(sorted episode IDs, count), without replacement",
+  "completion_sha256": "e4876e7d2fe5a16aacd117f6276f0c9eafdac67e7246cb359d5dd1a38a30544a",
+  "selected": [
+    {
+      "episode": "D0498",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0498_sol_annotation.json",
+      "sha256": "6aa50d9b141ea484bea1bf69385773181c2db3a2b156d883d1f8508a50f89fda",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0482",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0482_sol_annotation.json",
+      "sha256": "dcb43d8e910cf88259acbadd33b02902a8e267cb3557e3624d79b16ba29d5c6d",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0243",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0243_sol_annotation.json",
+      "sha256": "b712e4e3ea386f2825d058a84d6e0d9a6143b2f3967dbf510efea7211ce1d589",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0205",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0205_sol_annotation.json",
+      "sha256": "63e34e6e504b14512b74214e3c340e8a427cc0d53868a75faac1dad0acbfe06b",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0291",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0291_sol_annotation.json",
+      "sha256": "8b06bf25fd24335f17bfefba80274fed6b3e1fc762b2c7fee31b782dc9c245dd",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0017",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0017_sol_annotation.json",
+      "sha256": "fb384cebc9bf1fa2a222abb0d96354d5151dbc91ad952dd8acd607df8a6f7910",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0452",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_recovery_20261018\\D0452_sol_annotation.json",
+      "sha256": "2d4c0f04244adb0e1cfada106118ad3fb78e15585e409d99aa36bd7f34a17ae5",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_recovery_20261018",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0163",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0163_sol_annotation.json",
+      "sha256": "391d4aaab51efebaabe88ac1e8d376368bb0681ef7df791b9a046410f2ef9db3",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0104",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0104_sol_annotation.json",
+      "sha256": "439bca4eff6eae222bba8297efa3ec09b200a2c3b4018a6d28e3f566c1bc7e2d",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0426",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0426_sol_annotation.json",
+      "sha256": "9c8a86ae051036432a9551b3967615c602131d4261a05f5ba46974bfc4ee909a",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0337",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0337_sol_annotation.json",
+      "sha256": "76a5e224509dc239c6d7d4466f1b681c254bedf98c54f5b37b59935cceef97b4",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0174",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0174_sol_annotation.json",
+      "sha256": "c9bcbf05cdaa720a87559600b50bba9de25ac2554590b122cab49297505d061d",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0109",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0109_sol_annotation.json",
+      "sha256": "59fe61bb82e661fb44c873c590878901a712d70c8c220e26355531f1ffbea225",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0147",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0147_sol_annotation.json",
+      "sha256": "d4edc3e9f67721f63b9bf3558305fef0c91241ae886c37392176b0454fd0f138",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0086",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0086_sol_annotation.json",
+      "sha256": "d0fc319f2eae7b10dd75f07e7025e679d2484540bbf085d7eb90bba771e96634",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0211",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0211_sol_annotation.json",
+      "sha256": "0a1cc7c24c95aebd7938c10f2cdf611b6e8794edf3f9eb01a3fc236909fdb4b4",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0235",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0235_sol_annotation.json",
+      "sha256": "81bc4e4c8a9b79faf6323ff4bdb9c42928851b54a077b3c913e88abe30ce3b7e",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0074",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0074_sol_annotation.json",
+      "sha256": "d1ae9d7725cf49d3f7391120c1402de222884ab29f8c8b4f14b65b5b9f0c4b18",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0319",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0319_sol_annotation.json",
+      "sha256": "e59c97336a935e5138bbd2198a4b758fa9fc89d715cf1b3db36df33a35c78264",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    },
+    {
+      "episode": "D0020",
+      "annotation": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10\\D0020_sol_annotation.json",
+      "sha256": "4bcfd88e945753a09986b0dfcf0956508a6ab6ce2bb783ec65f77ab51d2e77fc",
+      "source_run": "C:\\Users\\LocalPC\\dev\\fail-traj-learn\\outputs\\sol_v8_distillation_500\\run_batch10",
+      "quality": "schema_validated_teacher_proposal"
+    }
+  ],
+  "review_status": "awaiting_user_review",
+  "training_export_status": "not_exported"
+}

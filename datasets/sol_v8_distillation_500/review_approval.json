@@ -1,0 +1,32 @@
+{
+  "scope": "Batch-level approval to export teacher annotations after inspecting a random sample of 20",
+  "user_statement": "looks good enough.",
+  "recorded_utc": "2026-10-19T05:28:32.723499+00:00",
+  "sample_size": 20,
+  "sample_seed": "7845393249386976415",
+  "sample_episode_ids": [
+    "D0498",
+    "D0482",
+    "D0243",
+    "D0205",
+    "D0291",
+    "D0017",
+    "D0452",
+    "D0163",
+    "D0104",
+    "D0426",
+    "D0337",
+    "D0174",
+    "D0109",
+    "D0147",
+    "D0086",
+    "D0211",
+    "D0235",
+    "D0074",
+    "D0319",
+    "D0020"
+  ],
+  "sample_sha256": "a34288296b4463cf0ec9dbc864c46bd9e9a756a2fde25637f08c2f4e048c3865",
+  "sample_approval_is_per_episode_adjudication": false,
+  "data_quality": "sample-approved teacher-generated supervision; not human ground truth"
+}

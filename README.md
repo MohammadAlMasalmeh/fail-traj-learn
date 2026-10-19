@@ -13,6 +13,7 @@ The earlier ordinal-advantage methods remain available as baselines.
 
 | Document | Purpose |
 |---|---|
+| [Sol V8 distillation dataset](docs/sol_v8_distillation_500.md) | Download the public 500-episode release, apply training masks, and reproduce the dataset pipeline |
 | [Atomic annotation runbook (V8)](docs/annotation_runbook_v8.md) | Frozen Sol/Astra protocol, annotation and viewer commands, fixed scoring, and next steps |
 | [Training guide](docs/failure_training.md) | Implemented model, annotation manifest, commands, checkpoints |
 | [GPT-6 review guide](REVIEW.md) | Download the review pack and launch the local browser reviewer on Windows, macOS, or Linux |

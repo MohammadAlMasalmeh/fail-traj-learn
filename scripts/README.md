@@ -10,6 +10,7 @@ Current portable annotation commands and retained prompts are documented in
 
 | Task | Entry point | Notes |
 |---|---|---|
+| Download the Sol V8 distillation dataset | `annotate/download_distillation_v8.py` | Pinned public release with size/SHA-256 verification; [training and reproduction guide](../docs/sol_v8_distillation_500.md) |
 | Audit failure-training data | `analysis/audit_failure_corpus.py` | Read-only corpus checks; only writes the requested report |
 | Compare references against current oracle | `analysis/recompute_failure_references.py` | Recomputes from telemetry in memory; does not replace references |
 | Verify simulator snapshots | `analysis/check_snapshot_restore.py` | Restore/replay spot checks, with exact/approximate modes |

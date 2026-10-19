@@ -4,6 +4,7 @@
 
 | Document | Scope |
 |---|---|
+| [Sol V8 distillation dataset](sol_v8_distillation_500.md) | Public release, verified download, required training masks, source inventory, and reproduction commands |
 | [Atomic annotation runbook (V8)](annotation_runbook_v8.md) | Frozen binary atomic-action protocol, reproducible runs, combined review, scoring, and human-evaluation priorities |
 | [Failure training](failure_training.md) | Implemented representation learner and manifest contract |
 | [Failure attention design](failure_attention_design.md) | Research plan; separates implemented pretraining from future scoring/control |

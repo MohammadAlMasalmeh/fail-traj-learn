@@ -1,0 +1,4919 @@
+{
+  "version": "sol_v8_distillation_500_v1",
+  "data": "/home/aliu/projects/fail-traj-learn/data",
+  "count": 500,
+  "seed": 20261015,
+  "suite": "libero_object",
+  "excluded_identities": 130,
+  "exclusion_manifests_sha256": {
+    "/home/aliu/projects/fail-traj-learn/bench/episodes.json": "cc9cdac2ae39189eba4104826f8920912116443a3f577450367e4b7d10f6c0fc",
+    "/home/aliu/projects/fail-traj-learn/bench/episodes_dev.json": "5f0c59f9243b0066f3c0d2bdd16f14a2043493699bc555f77948613dd2bbc836",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/gpt6_human_review_v1/private_manifest.json": "2e64a73f8f22060c0811fcdd84ab42af5d82db71ccfaa45ab9f275dd6a39dfb1",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/gpt6_pilot_v1/private_manifest.json": "c9766ac4f4e5d49bff81f89e06673a8b5c9dd4d037c73299c4720f45057dd5db",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/observable_sparse_v1/private_manifest.json": "9ceb187ee79b76713749f6be9d979edd793f9e632915023904ed58dc8aed6493",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/oopsie_transfer_v1/private_manifest.json": "a941554e36c7626e650a76d9ede62235330cc33126ac0231c4de2e88e9832d84",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/oracle_audit_r6/manifest.json": "68234ceca726222be189b978a86b8757e8ced97423f5e8a57028e1170b8654e8",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/preprocessing_ablation_v2/private_manifest.json": "f34d06af9b72863239872f845c776809e583a03fc7e0277a57e9f59d12e9f047",
+    "/mnt/c/Users/LocalPC/dev/fail-traj-learn/outputs/preprocessing_ablation_v3/holdout_private_manifest.json": "e7bf102281c8aa5e4604d208c400bad5373837c7ced1c41f5f73b08a63c11d1f"
+  },
+  "inventory_sha256": {
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t0/episodes.jsonl": "da074c73724244d1e9c2925357b67d8e2ec00f2815e342d3d43f05ae97d0b1a3",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t1/episodes.jsonl": "8b7d96ac41baf2fe4480a39f58ba7ad316ceba15ee2bc64879fccb0cd86b13c6",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t2/episodes.jsonl": "8ba33cb1b693c3cd4e9d1fd883e369d65ccd643a7666537cf2d295b72e5f3dad",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t3/episodes.jsonl": "2056afb7f77d245e24d72dfb5884df08fea561cd861844302519ef7fbb5bd583",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t4/episodes.jsonl": "7473c0b3ac922667100f23792387e09c54837252573c6b82369022a7163d585a",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t5/episodes.jsonl": "f46d2f0c00d9e7868da1720aa8f52c8752a2cffddec2720a6e33d66caafa2d2d",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t6/episodes.jsonl": "a22dae3e9296d8ea6f1946c922167f7b2d75d2b12dfaefc1db9a0fc0f4651393",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t7/episodes.jsonl": "f96aeee83f161ae8f90a056fd0b3e721fffdd75f325e012cd0b904252c3170d9",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t8/episodes.jsonl": "8dedc93c39ede020a5a6aae552fca7bf90582af4a631650ed70d724c03f2a836",
+    "/home/aliu/projects/fail-traj-learn/data/full_anchor__t9/episodes.jsonl": "9101667b71b7e50c2984a8bd159830d566c2855cc5e9c5606abc2752b7556ca4",
+    "/home/aliu/projects/fail-traj-learn/data/full_goal__t2/episodes.jsonl": "9a7f40867c221be3e55dcd305e603c040157889c6eae8c60be1a719ba75617ea",
+    "/home/aliu/projects/fail-traj-learn/data/full_goal__t3/episodes.jsonl": "e63110b876e998fbdb7e5a210652fa631e2d178051d8cda6325114b0ffb16bc1",
+    "/home/aliu/projects/fail-traj-learn/data/full_goal__t6/episodes.jsonl": "fcc92b8ae390b4e159fc521d8b7f542dc0dff229fc58d2122784595413962857",
+    "/home/aliu/projects/fail-traj-learn/data/full_goal__t7/episodes.jsonl": "92a6bbf15a42ea8d59f4fc82834956d1261a2beb021aebfe08357d64f41fe2f7",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t0/episodes.jsonl": "518ead57bda647dba8216c387d63605ca02f5a627f12a718033280ab31a0b15a",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t1/episodes.jsonl": "2b21ff65d16c786c6a2d809b64658d68f9793dc91b803e47a16dbbedef455054",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t2/episodes.jsonl": "8d5e2c0de47ccff6725df828b9bb0fa9047f6334c9c9cea1f6ca6b980c374bca",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t3/episodes.jsonl": "c8e4cdf0eabb023c38b2ec05a8db09e523d875e919318235223c615487d9563e",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t4/episodes.jsonl": "44700cdfe6d9aa5efb99e1d9533e465d69f33874d22bf75e3ebe7960d7429074",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t5/episodes.jsonl": "63a70e4af587ab7a4adb868ce67798dc6e726d9903e094ff685331515df1bc9f",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t6/episodes.jsonl": "ba58b667e96830041f5e763d694073378a96ee210a486c14beb2866248911592",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t7/episodes.jsonl": "6f751282c82010d1aab6d0771c1a4fe1e988f1e3de865070908695795aa979a8",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t8/episodes.jsonl": "1c6d179b396c7eeeed6204018e012c668b155d0851e1327f605568ed2ef49bc4",
+    "/home/aliu/projects/fail-traj-learn/data/full_goals8__t9/episodes.jsonl": "44c26a00737930c3927f2bcd6560bccb9611ff7f3ac7f4245362f70ffc99ec4d",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t0/episodes.jsonl": "617e9f54bd92452f05cac62d3bd2f8b01647a6d8a34ded1dc695357a7faec4a5",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t1/episodes.jsonl": "2673151afcbba6db6c9fceb7c189bfebc3c9c33b58cbd96034e3f1adc3512427",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t2/episodes.jsonl": "9157f3141b3093b8bd749744dd476b110f9939ff98f00a6b68be46a9d937cac8",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t3/episodes.jsonl": "6da5e770a7d0289c26dbe5becbd79ebbe9479329466a11c8b6699387f2b82857",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t5/episodes.jsonl": "1b141986e7af64e0f8bb43e83fbf56fcb735ca32797ceb63888fc138e419194f",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t7/episodes.jsonl": "54135645bbc5788844f04125d4442e780639d693cc39a030f3f4d6a4908f8bf2",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t8/episodes.jsonl": "4da9000d84cda8582d3ae0a4810e474f770d649178d716681bb706963a392dde",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s12__t9/episodes.jsonl": "7538315567c8b799fe80e2d5d95ab14caaee9663e9a40dd1438eed5e2f09c8bc",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t0/episodes.jsonl": "614405ad0b7956daa98facd88432e552d6560f7b2642bc8a4eee72411d542e88",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t1/episodes.jsonl": "9c4e7b46a7252ebd271b82efa5e4db852dc6876011514b1ea7f59c1df3d63cce",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t2/episodes.jsonl": "df154e9a98fa3d73c3971d2187ad4d1774c455f7d53bdf7f9dc16266bc161724",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t3/episodes.jsonl": "8df0e342cb9adc9bec1886fc625caff8721a6c77e5f81337759ba5b1f9f83328",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t4/episodes.jsonl": "1d7f00de6e5a27b6bbbe8280aa398e96f8d0dae678dfcade68cba28619a678c1",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t5/episodes.jsonl": "c75ecb5d53d85e1bef289772c35a04145aa61d1b55cae876052028299f24dfbc",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t6/episodes.jsonl": "887f3fa7f2e70c8dad258954859fce4bbba82f25acdc9da4adaccebd59b38853",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t7/episodes.jsonl": "2b89a5d26bb9a76de09dfa2b4b070dc4081c442ec71c98bd57ad2c40d4b1a52c",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t8/episodes.jsonl": "23365de7a9a8bced05df734673dfed6d3a74d0c3f14a8217c5b7f495cb7b502f",
+    "/home/aliu/projects/fail-traj-learn/data/full_l10s8__t9/episodes.jsonl": "18f1bb547239b7f29442e784837910f53c0d6b32f17ce11874fe98f6a201afa1",
+    "/home/aliu/projects/fail-traj-learn/data/full_l90__t26/episodes.jsonl": "78f91bce51c8f40bf64e940c92d65ec31ef9f0f2cc8411273e8f55c4742c835b",
+    "/home/aliu/projects/fail-traj-learn/data/full_l90__t38/episodes.jsonl": "09fe84f82c313465caf599ad0b1dab84e96f993e8dea226a97ead841fce95f0c",
+    "/home/aliu/projects/fail-traj-learn/data/full_l90__t47/episodes.jsonl": "9de2f6921ea8a7ca9b19b39815cd922cd412112c8a33a75e19bca3c9fcc19164",
+    "/home/aliu/projects/fail-traj-learn/data/full_l90__t74/episodes.jsonl": "b5d84baba65e6e74aeebc40e5ba3b21ecd59aeb73e1b9ab33f3c2bfa7c1a925c",
+    "/home/aliu/projects/fail-traj-learn/data/full_l90__t89/episodes.jsonl": "2d72d9a4f930e3c4b1e4d0d3a0dadc1436c79650af488b2efbe1e7b4da2ea9f4",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t0/episodes.jsonl": "342c87f7a327dd1675f23d3a927609ba0462743a44dbd62da23662f65fb9f81b",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t1/episodes.jsonl": "3f189a53dacc7c5d1e364d7caead2d0d9e51ef30311ca2f3ee245e3dfadb7038",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t2/episodes.jsonl": "de0ce1d203ae2acb8b3e98277f4f738bdfe6cc5610f218a655aa985507b4a19d",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t3/episodes.jsonl": "1749086e958a5c6ebd1f5469815fe7e44b5ceffa425dda628641a823fd1ed32e",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t4/episodes.jsonl": "c7d5c9f052511db86b559b16ae1a1cbd91d6e308a45594d68f31049ff8ed0630",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t5/episodes.jsonl": "803afbbb4393be9424e49a61fb5077bcd58027abb6479792aced6b99f5d4427c",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t6/episodes.jsonl": "9ab0e77e51ffe33ec1e53b82bc0fcb1f3f9d53a42d911b54a7b9b71296287b31",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t7/episodes.jsonl": "24a0ef0c094b1675341115f29e3ca02ed042278159c9729c6d1f50774efc7764",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t8/episodes.jsonl": "f17640ab7d8138a750541ed49490270ae1bd41f94cbe9ea567551c2690823ebf",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift12__t9/episodes.jsonl": "a4ef1cdd1ca10fd439199d0e7a6c8665fe40efb8ecf77883e4ee8bc2e87cfa1d",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t0/episodes.jsonl": "778a68dc8405ce6837631e86ab9468360f81a1d848ab5fb1ded7a4352a4801bc",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t1/episodes.jsonl": "07e142a188528e9012dfd63d218869d949a63afa9cc4261b2f2d9dead9c1b7df",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t2/episodes.jsonl": "11e62aca692bd3c78300c0100dbdaff3d218e6b8b18c2d124643f3189f0b3fc7",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t3/episodes.jsonl": "8d4a6ae26d4ae2a3d288414c2ab6cf67358176dd26776103443850c9c6491307",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t4/episodes.jsonl": "55f134632638a4bb15c29a62f09c5a703ae54d80498bb58d416d6bddfe490a40",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t5/episodes.jsonl": "fca01223c6950d89542a107c8ad454fcd8447a9f20d60b05f4a2bf5d6d305470",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t6/episodes.jsonl": "99686abf6da9039efe3d200ea932ea955615c3fa52684159601f62b835f514ab",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t7/episodes.jsonl": "442cfe2d1bb38263e1c5b60e01e5e9313951e2bf17f18065617b61c2d8c35492",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t8/episodes.jsonl": "672fa3eab76e0249fbbd0ae516cce3ce84bf14c87f93a45ab67b2c7b7aa6388c",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift16__t9/episodes.jsonl": "7d7a72924a80fbadbaf04c9b065f1fb7383f4c2cc32fccd783088bd838f401eb",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t0/episodes.jsonl": "015641b0b1cd84f772c8d16ac47585495e3d1080d9a963f09d7c12470e5da5ee",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t1/episodes.jsonl": "eb1ba1dfb8fa4d54661170ae1d0032d94371a062e6e104f41281d8999b98098d",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t2/episodes.jsonl": "0baf8fdbfed50c2cd48feb5f7b31961b9a7ab36e8e7a778b0ff0ff941dc58b1c",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t3/episodes.jsonl": "1e96f57d6cd6f99c3e7606e53d81770540438b0d6ff92355e0ff5f4d3842f760",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t4/episodes.jsonl": "919303759419fae0405a2fa61d0da097cae89ccf3c44a430401ca05d99c51353",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t5/episodes.jsonl": "c4bb4140adf03446f707dddf4a228d3018997a8768bc592679b0082616412a26",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t6/episodes.jsonl": "e7e1a8b9e79631a3dc58685eca04d73f45c548c764ca5c3be4cb95168193d8ca",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t7/episodes.jsonl": "ecff57ac8beb90c905f2f9b86ce3f83b2f4123689bf356138ee19b6b84d21455",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t8/episodes.jsonl": "aebc7fbc317daca21f18fcf06bd6c1bc8d8b004a5e0ea6e7ee3fa425f9bc01cf",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift4__t9/episodes.jsonl": "44cf0c239af1a1a01805c7832f0622addef623267759293b705b5eb578766b37",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t0/episodes.jsonl": "9d770f5e6568fe93c13370ff98daed50250645b7fe552fa7df464d33d309712f",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t1/episodes.jsonl": "3ce3d09d850dc711fb33580ff698fd176649ee40206f6e09a8a66c09faf58c2f",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t2/episodes.jsonl": "d2a6b73a509ae6916eb938d39b4511ff940caf0836dd0fa1c2c8ec1fb7780e37",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t3/episodes.jsonl": "788631b2b68fac52b4de715feab92b3d6ad9b23f306efc314abca7b7be415727",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t4/episodes.jsonl": "f5f9629767b8130841a67375e45c7e4aa23204c42fa784781da8dd9672df1210",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t5/episodes.jsonl": "23adb867f36fc8254840bfccdbd763bcd6ebe3cdd80bd5dc1cf60cd78f426a7d",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t6/episodes.jsonl": "ae80880439af6843ab95f15e26006e79c55b633ec869c550c1b5da3afe20cfea",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t7/episodes.jsonl": "967f83ac977d70de360c3e0fec49ec6fbb841350b01f8b58e8290d477a06d836",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t8/episodes.jsonl": "98886d6f9c932b1b50a9525419dd7a385e06f361bd2e58c0378fdea8683d1417",
+    "/home/aliu/projects/fail-traj-learn/data/full_shift8__t9/episodes.jsonl": "2d20f3ab240b0cf0db6d8f7e39278bdb0a1d30c4da904cc660a937cc6e224e0d"
+  },
+  "corrections_sha256": "b162b2991a9fbd46d3110d6b171bae7a1e2e94c01a78b72739ac849314e2f695",
+  "splits": {
+    "test": [
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 166,
+        "id": "T0001"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 115,
+        "id": "T0002"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "T0003"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0004"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "T0005"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "T0006"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 143,
+        "id": "T0007"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "T0008"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 187,
+        "id": "T0009"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "T0010"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0011"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 121,
+        "id": "T0012"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 147,
+        "id": "T0013"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 120,
+        "id": "T0014"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0015"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 133,
+        "id": "T0016"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "T0017"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "T0018"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "T0019"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0020"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0021"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 129,
+        "id": "T0022"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 132,
+        "id": "T0023"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 188,
+        "id": "T0024"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "T0025"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 179,
+        "id": "T0026"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 206,
+        "id": "T0027"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "T0028"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 144,
+        "id": "T0029"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "T0030"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "T0031"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "T0032"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "T0033"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "T0034"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 157,
+        "id": "T0035"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 142,
+        "id": "T0036"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 129,
+        "id": "T0037"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 132,
+        "id": "T0038"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 122,
+        "id": "T0039"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 144,
+        "id": "T0040"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "T0041"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 159,
+        "id": "T0042"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 201,
+        "id": "T0043"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "T0044"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 260,
+        "id": "T0045"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 110,
+        "id": "T0046"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 147,
+        "id": "T0047"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "T0048"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "T0049"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "T0050"
+      }
+    ],
+    "development": [
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "V0001"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 121,
+        "id": "V0002"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 139,
+        "id": "V0003"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "V0004"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "V0005"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 275,
+        "id": "V0006"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "V0007"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 115,
+        "id": "V0008"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 245,
+        "id": "V0009"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "V0010"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 138,
+        "id": "V0011"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 239,
+        "id": "V0012"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 120,
+        "id": "V0013"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 114,
+        "id": "V0014"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 157,
+        "id": "V0015"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "V0016"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 133,
+        "id": "V0017"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "V0018"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "V0019"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "V0020"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "V0021"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "V0022"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 125,
+        "id": "V0023"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "V0024"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 192,
+        "id": "V0025"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 143,
+        "id": "V0026"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 127,
+        "id": "V0027"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 177,
+        "id": "V0028"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "V0029"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "V0030"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "V0031"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 3,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "V0032"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 183,
+        "id": "V0033"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "V0034"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 119,
+        "id": "V0035"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 218,
+        "id": "V0036"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "V0037"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "V0038"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 126,
+        "id": "V0039"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 141,
+        "id": "V0040"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 154,
+        "id": "V0041"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 125,
+        "id": "V0042"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "V0043"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "V0044"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "V0045"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 151,
+        "id": "V0046"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 164,
+        "id": "V0047"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 3,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "V0048"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "V0049"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "V0050"
+      }
+    ],
+    "train": [
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0001"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 212,
+        "id": "D0002"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 137,
+        "id": "D0003"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 149,
+        "id": "D0004"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 202,
+        "id": "D0005"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 181,
+        "id": "D0006"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0007"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 127,
+        "id": "D0008"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 127,
+        "id": "D0009"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0010"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0011"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0012"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 144,
+        "id": "D0013"
+      },
+      {
+        "dataset": "full_shift4__t2",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 112,
+        "id": "D0014"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0015"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 120,
+        "id": "D0016"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0017"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0018"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 253,
+        "id": "D0019"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 243,
+        "id": "D0020"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0021"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 125,
+        "id": "D0022"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0023"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0024"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0025"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 192,
+        "id": "D0026"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0027"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 218,
+        "id": "D0028"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0029"
+      },
+      {
+        "dataset": "full_anchor__t0",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 136,
+        "id": "D0030"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 193,
+        "id": "D0031"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 197,
+        "id": "D0032"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 141,
+        "id": "D0033"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0034"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 3,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0035"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0036"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0037"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0038"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0039"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0040"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 189,
+        "id": "D0041"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 159,
+        "id": "D0042"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 164,
+        "id": "D0043"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 94,
+        "id": "D0044"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0045"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0046"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0047"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0048"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 13,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 175,
+        "id": "D0049"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0050"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0051"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0052"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 138,
+        "id": "D0053"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0054"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0055"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 145,
+        "id": "D0056"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0057"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0058"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 112,
+        "id": "D0059"
+      },
+      {
+        "dataset": "full_anchor__t4",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 146,
+        "id": "D0060"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 142,
+        "id": "D0061"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 250,
+        "id": "D0062"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0063"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 129,
+        "id": "D0064"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 153,
+        "id": "D0065"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 170,
+        "id": "D0066"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 269,
+        "id": "D0067"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0068"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 126,
+        "id": "D0069"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 118,
+        "id": "D0070"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0071"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0072"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 122,
+        "id": "D0073"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 132,
+        "id": "D0074"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 119,
+        "id": "D0075"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0076"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0077"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0078"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 232,
+        "id": "D0079"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0080"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0081"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0082"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 245,
+        "id": "D0083"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0084"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 253,
+        "id": "D0085"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 225,
+        "id": "D0086"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 126,
+        "id": "D0087"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 117,
+        "id": "D0088"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0089"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 128,
+        "id": "D0090"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0091"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 137,
+        "id": "D0092"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 184,
+        "id": "D0093"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0094"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0095"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 139,
+        "id": "D0096"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 133,
+        "id": "D0097"
+      },
+      {
+        "dataset": "full_shift4__t2",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 103,
+        "id": "D0098"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0099"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0100"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 128,
+        "id": "D0101"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0102"
+      },
+      {
+        "dataset": "full_anchor__t4",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 140,
+        "id": "D0103"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0104"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0105"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 181,
+        "id": "D0106"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0107"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0108"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0109"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 184,
+        "id": "D0110"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 157,
+        "id": "D0111"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0112"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 140,
+        "id": "D0113"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0114"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0115"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 106,
+        "id": "D0116"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 110,
+        "id": "D0117"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 147,
+        "id": "D0118"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0119"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 278,
+        "id": "D0120"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0121"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0122"
+      },
+      {
+        "dataset": "full_anchor__t0",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 124,
+        "id": "D0123"
+      },
+      {
+        "dataset": "full_shift4__t2",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 104,
+        "id": "D0124"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 185,
+        "id": "D0125"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0126"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 124,
+        "id": "D0127"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0128"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 170,
+        "id": "D0129"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 129,
+        "id": "D0130"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0131"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 109,
+        "id": "D0132"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0133"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0134"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 113,
+        "id": "D0135"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0136"
+      },
+      {
+        "dataset": "full_anchor__t0",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 135,
+        "id": "D0137"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0138"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0139"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0140"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 96,
+        "id": "D0141"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 193,
+        "id": "D0142"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0143"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0144"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 149,
+        "id": "D0145"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 126,
+        "id": "D0146"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0147"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0148"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0149"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0150"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 113,
+        "id": "D0151"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 146,
+        "id": "D0152"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 176,
+        "id": "D0153"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0154"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 103,
+        "id": "D0155"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0156"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 180,
+        "id": "D0157"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0158"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0159"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 150,
+        "id": "D0160"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0161"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0162"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0163"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0164"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0165"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 226,
+        "id": "D0166"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 158,
+        "id": "D0167"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0168"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0169"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0170"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0171"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 138,
+        "id": "D0172"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0173"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0174"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 127,
+        "id": "D0175"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 128,
+        "id": "D0176"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0177"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0178"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 134,
+        "id": "D0179"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0180"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0181"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 111,
+        "id": "D0182"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 134,
+        "id": "D0183"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0184"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0185"
+      },
+      {
+        "dataset": "full_anchor__t0",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 146,
+        "id": "D0186"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0187"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0188"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 171,
+        "id": "D0189"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0190"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0191"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0192"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0193"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0194"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0195"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0196"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 202,
+        "id": "D0197"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0198"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0199"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0200"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 122,
+        "id": "D0201"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 216,
+        "id": "D0202"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 151,
+        "id": "D0203"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 176,
+        "id": "D0204"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0205"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0206"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 119,
+        "id": "D0207"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 192,
+        "id": "D0208"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 131,
+        "id": "D0209"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 135,
+        "id": "D0210"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0211"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 122,
+        "id": "D0212"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0213"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0214"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0215"
+      },
+      {
+        "dataset": "full_anchor__t0",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 136,
+        "id": "D0216"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0217"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0218"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 141,
+        "id": "D0219"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0220"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 111,
+        "id": "D0221"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 278,
+        "id": "D0222"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0223"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0224"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0225"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 216,
+        "id": "D0226"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0227"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0228"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 161,
+        "id": "D0229"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 148,
+        "id": "D0230"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0231"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 123,
+        "id": "D0232"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0233"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0234"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 131,
+        "id": "D0235"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0236"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 125,
+        "id": "D0237"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 213,
+        "id": "D0238"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0239"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0240"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0241"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0242"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0243"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 27,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 143,
+        "id": "D0244"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 188,
+        "id": "D0245"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 207,
+        "id": "D0246"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0247"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0248"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 125,
+        "id": "D0249"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0250"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0251"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 201,
+        "id": "D0252"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0253"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 149,
+        "id": "D0254"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0255"
+      },
+      {
+        "dataset": "full_shift4__t5",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 153,
+        "id": "D0256"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 202,
+        "id": "D0257"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 119,
+        "id": "D0258"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0259"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0260"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0261"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0262"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 181,
+        "id": "D0263"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0264"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 254,
+        "id": "D0265"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 129,
+        "id": "D0266"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 153,
+        "id": "D0267"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0268"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 201,
+        "id": "D0269"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 148,
+        "id": "D0270"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 248,
+        "id": "D0271"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 27,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 126,
+        "id": "D0272"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 127,
+        "id": "D0273"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0274"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 123,
+        "id": "D0275"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 228,
+        "id": "D0276"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0277"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0278"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 128,
+        "id": "D0279"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 183,
+        "id": "D0280"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 141,
+        "id": "D0281"
+      },
+      {
+        "dataset": "full_anchor__t2",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 112,
+        "id": "D0282"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 125,
+        "id": "D0283"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0284"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 147,
+        "id": "D0285"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0286"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0287"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 117,
+        "id": "D0288"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0289"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 118,
+        "id": "D0290"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 112,
+        "id": "D0291"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 152,
+        "id": "D0292"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0293"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 27,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 144,
+        "id": "D0294"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 267,
+        "id": "D0295"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0296"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 131,
+        "id": "D0297"
+      },
+      {
+        "dataset": "full_anchor__t9",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 111,
+        "id": "D0298"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 191,
+        "id": "D0299"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 145,
+        "id": "D0300"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0301"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 229,
+        "id": "D0302"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 148,
+        "id": "D0303"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 118,
+        "id": "D0304"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 195,
+        "id": "D0305"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0306"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 209,
+        "id": "D0307"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0308"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0309"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0310"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0311"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0312"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0313"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 175,
+        "id": "D0314"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0315"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0316"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 179,
+        "id": "D0317"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 12,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 196,
+        "id": "D0318"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0319"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 158,
+        "id": "D0320"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0321"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 118,
+        "id": "D0322"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0323"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0324"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 129,
+        "id": "D0325"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 117,
+        "id": "D0326"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0327"
+      },
+      {
+        "dataset": "full_anchor__t4",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 141,
+        "id": "D0328"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0329"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0330"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0331"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 148,
+        "id": "D0332"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 142,
+        "id": "D0333"
+      },
+      {
+        "dataset": "full_shift16__t9",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0334"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 121,
+        "id": "D0335"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 126,
+        "id": "D0336"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0337"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0338"
+      },
+      {
+        "dataset": "full_anchor__t4",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 146,
+        "id": "D0339"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 148,
+        "id": "D0340"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0341"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 147,
+        "id": "D0342"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 16,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 114,
+        "id": "D0343"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0344"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0345"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0346"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 119,
+        "id": "D0347"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 125,
+        "id": "D0348"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 190,
+        "id": "D0349"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0350"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 116,
+        "id": "D0351"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 13,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 134,
+        "id": "D0352"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0353"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0354"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 147,
+        "id": "D0355"
+      },
+      {
+        "dataset": "full_anchor__t3",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 156,
+        "id": "D0356"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 155,
+        "id": "D0357"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 140,
+        "id": "D0358"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0359"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0360"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 26,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0361"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0362"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 19,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 156,
+        "id": "D0363"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0364"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0365"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0366"
+      },
+      {
+        "dataset": "full_shift12__t7",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 224,
+        "id": "D0367"
+      },
+      {
+        "dataset": "full_shift4__t9",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0368"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 120,
+        "id": "D0369"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0370"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 149,
+        "id": "D0371"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0372"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 29,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0373"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 16,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0374"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0375"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 136,
+        "id": "D0376"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 22,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0377"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0378"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 164,
+        "id": "D0379"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0380"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 15,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0381"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0382"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0383"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 151,
+        "id": "D0384"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 190,
+        "id": "D0385"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0386"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0387"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 197,
+        "id": "D0388"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0389"
+      },
+      {
+        "dataset": "full_shift8__t7",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 184,
+        "id": "D0390"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 130,
+        "id": "D0391"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 145,
+        "id": "D0392"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 105,
+        "id": "D0393"
+      },
+      {
+        "dataset": "full_shift4__t8",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 148,
+        "id": "D0394"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 4,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0395"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0396"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0397"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 175,
+        "id": "D0398"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 221,
+        "id": "D0399"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 241,
+        "id": "D0400"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 205,
+        "id": "D0401"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0402"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 185,
+        "id": "D0403"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 211,
+        "id": "D0404"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0405"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 253,
+        "id": "D0406"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0407"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 150,
+        "id": "D0408"
+      },
+      {
+        "dataset": "full_shift4__t2",
+        "episode_index": 4,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 99,
+        "id": "D0409"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 238,
+        "id": "D0410"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0411"
+      },
+      {
+        "dataset": "full_anchor__t4",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 138,
+        "id": "D0412"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0413"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0414"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0415"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 27,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 110,
+        "id": "D0416"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0417"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 3,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0418"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0419"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 146,
+        "id": "D0420"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0421"
+      },
+      {
+        "dataset": "full_shift16__t0",
+        "episode_index": 5,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0422"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0423"
+      },
+      {
+        "dataset": "full_anchor__t7",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 138,
+        "id": "D0424"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 124,
+        "id": "D0425"
+      },
+      {
+        "dataset": "full_shift8__t0",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 139,
+        "id": "D0426"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0427"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 28,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0428"
+      },
+      {
+        "dataset": "full_shift4__t2",
+        "episode_index": 11,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 107,
+        "id": "D0429"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 122,
+        "id": "D0430"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 6,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0431"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0432"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 10,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0433"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 119,
+        "id": "D0434"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 29,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 154,
+        "id": "D0435"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 0,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 131,
+        "id": "D0436"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 2,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0437"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0438"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 157,
+        "id": "D0439"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0440"
+      },
+      {
+        "dataset": "full_shift12__t5",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 129,
+        "id": "D0441"
+      },
+      {
+        "dataset": "full_shift12__t1",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 125,
+        "id": "D0442"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 20,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 109,
+        "id": "D0443"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 108,
+        "id": "D0444"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 25,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0445"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0446"
+      },
+      {
+        "dataset": "full_shift4__t0",
+        "episode_index": 25,
+        "recorded_success": true,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 135,
+        "id": "D0447"
+      },
+      {
+        "dataset": "full_shift4__t3",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 167,
+        "id": "D0448"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0449"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 3,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0450"
+      },
+      {
+        "dataset": "full_shift8__t6",
+        "episode_index": 17,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 147,
+        "id": "D0451"
+      },
+      {
+        "dataset": "full_shift8__t4",
+        "episode_index": 20,
+        "recorded_success": false,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0452"
+      },
+      {
+        "dataset": "full_shift4__t4",
+        "episode_index": 18,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 146,
+        "id": "D0453"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0454"
+      },
+      {
+        "dataset": "full_shift16__t2",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 110,
+        "id": "D0455"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 23,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0456"
+      },
+      {
+        "dataset": "full_anchor__t8",
+        "episode_index": 8,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 152,
+        "id": "D0457"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0458"
+      },
+      {
+        "dataset": "full_shift16__t7",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 280,
+        "id": "D0459"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 23,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 142,
+        "id": "D0460"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 11,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0461"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 17,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0462"
+      },
+      {
+        "dataset": "full_shift12__t2",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 145,
+        "id": "D0463"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 24,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0464"
+      },
+      {
+        "dataset": "full_shift12__t4",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 140,
+        "id": "D0465"
+      },
+      {
+        "dataset": "full_shift12__t9",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 103,
+        "id": "D0466"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 155,
+        "id": "D0467"
+      },
+      {
+        "dataset": "full_shift4__t6",
+        "episode_index": 7,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 142,
+        "id": "D0468"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 215,
+        "id": "D0469"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 27,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0470"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 22,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 142,
+        "id": "D0471"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 129,
+        "id": "D0472"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 21,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 171,
+        "id": "D0473"
+      },
+      {
+        "dataset": "full_shift16__t4",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the ketchup and place it in the basket",
+        "n_frames": 149,
+        "id": "D0474"
+      },
+      {
+        "dataset": "full_shift8__t3",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 128,
+        "id": "D0475"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 12,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0476"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 15,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 135,
+        "id": "D0477"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 26,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 159,
+        "id": "D0478"
+      },
+      {
+        "dataset": "full_shift16__t1",
+        "episode_index": 13,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0479"
+      },
+      {
+        "dataset": "full_shift12__t6",
+        "episode_index": 19,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0480"
+      },
+      {
+        "dataset": "full_anchor__t1",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 124,
+        "id": "D0481"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 6,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 156,
+        "id": "D0482"
+      },
+      {
+        "dataset": "full_shift16__t6",
+        "episode_index": 8,
+        "recorded_success": false,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 280,
+        "id": "D0483"
+      },
+      {
+        "dataset": "full_shift12__t8",
+        "episode_index": 24,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 232,
+        "id": "D0484"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 27,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 183,
+        "id": "D0485"
+      },
+      {
+        "dataset": "full_shift8__t8",
+        "episode_index": 3,
+        "recorded_success": true,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 238,
+        "id": "D0486"
+      },
+      {
+        "dataset": "full_shift16__t5",
+        "episode_index": 5,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 135,
+        "id": "D0487"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 10,
+        "recorded_success": true,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 118,
+        "id": "D0488"
+      },
+      {
+        "dataset": "full_shift16__t3",
+        "episode_index": 9,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0489"
+      },
+      {
+        "dataset": "full_shift4__t1",
+        "episode_index": 28,
+        "recorded_success": true,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 141,
+        "id": "D0490"
+      },
+      {
+        "dataset": "full_shift16__t8",
+        "episode_index": 0,
+        "recorded_success": false,
+        "task": "pick up the chocolate pudding and place it in the basket",
+        "n_frames": 280,
+        "id": "D0491"
+      },
+      {
+        "dataset": "full_shift12__t0",
+        "episode_index": 21,
+        "recorded_success": false,
+        "task": "pick up the alphabet soup and place it in the basket",
+        "n_frames": 280,
+        "id": "D0492"
+      },
+      {
+        "dataset": "full_shift8__t1",
+        "episode_index": 18,
+        "recorded_success": false,
+        "task": "pick up the cream cheese and place it in the basket",
+        "n_frames": 280,
+        "id": "D0493"
+      },
+      {
+        "dataset": "full_shift8__t2",
+        "episode_index": 1,
+        "recorded_success": false,
+        "task": "pick up the salad dressing and place it in the basket",
+        "n_frames": 280,
+        "id": "D0494"
+      },
+      {
+        "dataset": "full_shift12__t3",
+        "episode_index": 7,
+        "recorded_success": false,
+        "task": "pick up the bbq sauce and place it in the basket",
+        "n_frames": 280,
+        "id": "D0495"
+      },
+      {
+        "dataset": "full_shift8__t9",
+        "episode_index": 14,
+        "recorded_success": false,
+        "task": "pick up the orange juice and place it in the basket",
+        "n_frames": 280,
+        "id": "D0496"
+      },
+      {
+        "dataset": "full_shift8__t5",
+        "episode_index": 14,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 129,
+        "id": "D0497"
+      },
+      {
+        "dataset": "full_anchor__t5",
+        "episode_index": 2,
+        "recorded_success": true,
+        "task": "pick up the tomato sauce and place it in the basket",
+        "n_frames": 129,
+        "id": "D0498"
+      },
+      {
+        "dataset": "full_anchor__t6",
+        "episode_index": 1,
+        "recorded_success": true,
+        "task": "pick up the butter and place it in the basket",
+        "n_frames": 151,
+        "id": "D0499"
+      },
+      {
+        "dataset": "full_shift4__t7",
+        "episode_index": 9,
+        "recorded_success": true,
+        "task": "pick up the milk and place it in the basket",
+        "n_frames": 215,
+        "id": "D0500"
+      }
+    ]
+  },
+  "remaining_unlabeled": 605,
+  "limitation": "Outcome-balanced, task/collection-spread sample, not a natural-frequency test set. Recorded outcomes are sampling metadata, not local failure truth. Holdouts are episode-disjoint, not task- or policy-disjoint."
+}

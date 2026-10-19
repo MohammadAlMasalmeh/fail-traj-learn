@@ -2,3 +2,10 @@
 * text=auto eol=lf
 *.png binary
 *.mp4 binary
+
+# Published V8 fingerprints include the original Python/snapshot line endings.
+# Preserve these bytes so a fresh clone can verify the frozen run manifests.
+scripts/annotate/annotate_trajectories.py -text whitespace=cr-at-eol
+scripts/annotate/annotation_runtime.py -text whitespace=cr-at-eol
+scripts/annotate/annotation_states.py -text whitespace=cr-at-eol
+datasets/sol_v8_distillation_500/*.json -text whitespace=cr-at-eol

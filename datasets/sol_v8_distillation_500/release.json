@@ -1,0 +1,90 @@
+{
+  "repo_id": "andaloo23/sol-v8-distillation-500",
+  "repo_type": "dataset",
+  "revision": "a8590e59f6fa1589de61bea83a7b82a888aed83c",
+  "url": "https://huggingface.co/datasets/andaloo23/sol-v8-distillation-500",
+  "archive": {
+    "filename": "sol_v8_distillation_500_export_v1.zip",
+    "bytes": 795088474,
+    "sha256": "844b68b5727d5a95412f82a815190aa308141f1f5d8b2cef59c10ac54280ba3e",
+    "directory": "sol_v8_distillation_500_export_v1"
+  },
+  "format": "sol_v8_multimodal_distillation_v1",
+  "teacher_model": "gpt-6.1-sol",
+  "prompt_sha256": "e7ed5aae4443ce1ee721bacf6746c9abef4b1c2d11f18039414d5a00811ce20e",
+  "counts": {
+    "episodes": 500,
+    "segments": 4093,
+    "unflagged_segments": 1410,
+    "masked_segments": 2683,
+    "masked_identities": 260,
+    "episodes_without_unflagged_segments": 121
+  },
+  "images": 44652,
+  "development_reserved": 50,
+  "test_reserved": 50,
+  "historical_settings": {
+    "scheme": "atomic",
+    "label_mode": "failure_binary",
+    "models": {
+      "sol": "gpt-6.1-sol"
+    },
+    "reasoning": "low",
+    "image_detail": "high",
+    "sample_stride": 5,
+    "max_input_tokens": 80000,
+    "max_output_tokens": 12288,
+    "workers": 2,
+    "retries": 0,
+    "reservations": {
+      "sol": 0.5
+    },
+    "maximum_reserved_usd": 250.0,
+    "rates_per_million": {
+      "sol": {
+        "input": 2,
+        "cached": 0.1,
+        "cache_write": 2.5,
+        "output": 10
+      }
+    },
+    "price_checked": "2026-10-10",
+    "pricing_sources": [
+      "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+    ]
+  },
+  "frozen_code_sha256": {
+    "scripts/annotate/annotate_trajectories.py": "be09bb9b5d85bbb095d008bcddf799435a4ef6676f1748480a0e1691077962fb",
+    "scripts/annotate/annotation_runtime.py": "e4bc718802259a8b05e5fdda739c22c3e89f8bf724d75a01ebabb728b3a7da18",
+    "scripts/annotate/annotation_states.py": "c719fc5f04b487a2072ed731aa33208ef3c7d49d17d18a14e6f79a209a5468e8",
+    "scripts/annotate/prompts/atomic_actions/annotation.txt": "e7ed5aae4443ce1ee721bacf6746c9abef4b1c2d11f18039414d5a00811ce20e"
+  },
+  "exporter_sha256": "5622f35b5b738184efdb49f4ef4a431fb815c902d94aadb8d42d34effee91e2c",
+  "batch_runs": {
+    "run_batch10": {
+      "shards": 50,
+      "max_requests_per_shard": 10,
+      "validated": 496
+    },
+    "run_recovery_20261018": {
+      "shards": 1,
+      "requests": 4,
+      "validated": 4
+    }
+  },
+  "completion_sha256": "e4876e7d2fe5a16aacd117f6276f0c9eafdac67e7246cb359d5dd1a38a30544a",
+  "generation_estimate_usd": 17.8752715,
+  "supporting_files_sha256": {
+    "review_approval.json": "d9786a50329fdff9de8e428e49fed9f509e19ea91422d8c17c28f32433a91083",
+    "review_sample.json": "a34288296b4463cf0ec9dbc864c46bd9e9a756a2fde25637f08c2f4e048c3865",
+    "selection.json": "6f728b0242a85387eec0c5e4a91c4366a5b26e5658706cb77cdb48061b84a0e5",
+    "verification.json": "19001a2cb91a7f3903e2ca8314254bc84e0de34c4ebe01cfddaf5479a9ea9560"
+  },
+  "notes": [
+    "Historical model/pricing settings are provenance, not a current pricing quote.",
+    "Snapshot paths refer to the original build machine. Use the guide to create a relocated selection for a new build.",
+    "Review sample status predates approval; review_approval.json records the subsequent user approval.",
+    "Archive bytes are immutable; re-generation can produce different teacher outputs and timestamps."
+  ]
+}

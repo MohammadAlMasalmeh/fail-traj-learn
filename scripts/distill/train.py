@@ -26,12 +26,15 @@ ap.add_argument("--max_steps", type=int, default=0, help="debug: stop after N op
 ap.add_argument("--max_len", type=int, default=10000, help="skip examples longer than this (0 = none)")
 ap.add_argument("--resume", default="", help="adapter dir from a previous run's ckpt (weights only; optimizer restarts)")
 ap.add_argument("--resume_examples", type=int, default=0)
+ap.add_argument("--fail-token-weight", type=float, default=1.0, help="loss weight for failure true/false and categories-list tokens")
+ap.add_argument("--events", action="store_true", help="append derived gripper events block to the student input")
 ap.add_argument("--seed", type=int, default=0)
 args = ap.parse_args()
 
-cfg = data.InputCfg(stride=args.stride, cams=args.cams, max_soft_tokens=args.max_soft_tokens)
+cfg = data.InputCfg(stride=args.stride, cams=args.cams, max_soft_tokens=args.max_soft_tokens, events=args.events)
 os.makedirs(os.path.join(args.out, "ckpt"), exist_ok=True)
 log_path = os.path.join(args.out, "train_log.jsonl")
+data.save_cfg(cfg, args.out)
 logf = open(log_path, "a", encoding="utf8")
 
 
@@ -78,7 +81,10 @@ start_idx = args.resume_examples
 
 def producer():
     for i in range(start_idx, len(order)):
-        ex = data.encode_train(proc, recs[order[i]], cfg=cfg, unmask_reasons=args.unmask_reasons)
+        ex = data.encode_train(proc, recs[order[i]], cfg=cfg, unmask_reasons=args.unmask_reasons,
+                             fail_token_weight=args.fail_token_weight, max_len=args.max_len)
+        if ex["img_stride"] != cfg.stride:
+            log({"event": "img_drop", "id": order[i], "img_stride": ex["img_stride"], "seq": len(ex["input_ids"])})
         ex["id"] = order[i]
         Q.put(ex)
     Q.put(None)
@@ -95,12 +101,13 @@ group = []
 
 def save(path):
     model.save_pretrained(path)
+    data.save_cfg(cfg, path)
     json.dump({"step": step, "examples": done, "args": vars(args)}, open(os.path.join(path, "state.json"), "w"))
 
 
 def run_group(group):
     global step
-    N = sum(int((e["labels"] != -100).sum()) for e in group)
+    N = sum(float(e["weights"][1:][e["labels"][1:] != -100].sum()) for e in group)  # weighted token count (= #tokens when weight is 1)
     tot = 0.0
     tg = time.time()
     for e in group:

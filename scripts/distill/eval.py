@@ -38,6 +38,13 @@ def cmd_generate(a):
     recs = {r["id"]: r for r in data.load_records()}
     proc = load_processor()
     adapter = None if a.adapter in (None, "none", "") else a.adapter
+    if a.input_cfg:
+        cfg = data.load_cfg(a.input_cfg)
+    elif a.events:
+        cfg = data.InputCfg(events=True)
+    else:
+        cfg = data.DEFAULT_CFG
+    print("[gen] input cfg", cfg, flush=True)
     model = load_model(adapter_path=adapter).eval()
 
     class EOT(StoppingCriteria):
@@ -48,8 +55,8 @@ def cmd_generate(a):
         t0 = time.time()
         rec = {"id": eid, "tag": a.tag, "adapter": adapter, "max_new_tokens": a.max_new_tokens}
         try:
-            msgs = data.build_student_messages(recs[eid], cfg=data.DEFAULT_CFG)
-            inp = data.encode_prompt(proc, msgs, cfg=data.DEFAULT_CFG).to("cuda")
+            msgs = data.build_student_messages(recs[eid], cfg=cfg)
+            inp = data.encode_prompt(proc, msgs, cfg=cfg).to("cuda")
             inp["pixel_values"] = inp["pixel_values"].to(torch.bfloat16)
             P = inp["input_ids"].shape[1]
             with torch.no_grad():
@@ -363,6 +370,8 @@ if __name__ == "__main__":
     g = sp.add_parser("generate")
     g.add_argument("--adapter", default="none")
     g.add_argument("--tag", required=True)
+    g.add_argument("--events", action="store_true", help="use the derived-events input (InputCfg(events=True))")
+    g.add_argument("--input-cfg", default="", help="input_cfg.json or adapter dir containing it")
     g.add_argument("--limit", type=int, default=0)
     g.add_argument("--max-new-tokens", type=int, default=5120)
     s = sp.add_parser("score")

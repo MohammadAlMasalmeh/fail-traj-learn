@@ -8,10 +8,12 @@ def _core(m):
     return base.model, base.lm_head, base.config.get_text_config().final_logit_softcapping
 
 
-def _chunk_loss(h, w, labels, softcap):
+def _chunk_loss(h, w, labels, softcap, wt=None):
     logits = torch.nn.functional.linear(h, w).float()
     if softcap:
         logits = torch.tanh(logits / softcap) * softcap
+    if wt is not None:
+        return (torch.nn.functional.cross_entropy(logits, labels, reduction="none") * wt).sum()
     return torch.nn.functional.cross_entropy(logits, labels, reduction="sum")
 
 
@@ -27,7 +29,11 @@ def sft_loss(m, ex, device="cuda", chunk=128):
     pos = (lab[1:] != -100).nonzero().squeeze(-1)  # positions whose NEXT token is supervised
     tgt = lab[1:][pos]
     h = hid[pos]
+    wt = None
+    if ex.get("weights") is not None and bool((ex["weights"] != 1.0).any()):
+        wt = ex["weights"].to(device)[1:][pos].float()
     total = 0.0
     for i in range(0, h.shape[0], chunk):
-        total = total + checkpoint(_chunk_loss, h[i:i + chunk], lm_head.weight, tgt[i:i + chunk], softcap, use_reentrant=False)
+        total = total + checkpoint(_chunk_loss, h[i:i + chunk], lm_head.weight, tgt[i:i + chunk], softcap,
+                                   None if wt is None else wt[i:i + chunk], use_reentrant=False)
     return total, tgt.numel()  # (sum of token CE, #supervised tokens)
